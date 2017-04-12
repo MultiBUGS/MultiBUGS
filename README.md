@@ -1,6 +1,8 @@
 # MultiBUGS
 
-MultiBUGS implements the simple, generic parallelisation algorithm introduced in Goudie et al (2017). It links together some modules from [OpenBUGS](http://www.openbugs.net/) with a few additional modules to implement our parallelisation algorithm.
+MultiBUGS implements a simple, automatic algorithm for parallelising Markov chain Monte Carlo (MCMC) algorithms for posterior inference of Bayesian hierarchical models. It builds on the existing algorithms and tools in [OpenBUGS](http://www.openbugs.net/), and so is applicable to the broad range of statistical models that can be fitted using BUGS-language software, but automatically parallelises the MCMC algorithm to dramatically speed up computation. This makes modern multi-core computing accessible to applied statisticians, without requiring any experience of parallel programming.
+
+Goudie, R. J. B., Turner, R. M., De Angelis, D., Thomas, A. (2017) Massively parallel MCMC for Bayesian hierarchical models. [arXiv:1704.03216](https://arxiv.org/abs/1704.03216)
 
 ## Installation
 
