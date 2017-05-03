@@ -1,0 +1,23 @@
+			model {
+
+			# Likelihood
+				for (i in 1 : N) {
+					O[i]  ~ dpois(mu[i])
+					log(mu[i]) <- log(E[i]) + alpha0 + alpha1 * X[i]/10 + b[i]
+					# Area-specific relative risk (for maps)
+					RR[i] <- exp(alpha0 + alpha1 * X[i]/10 + b[i])  
+				}
+
+			# CAR prior distribution for random effects: 
+				b[1:N] ~ car.normal(adj[], weights[], num[], tau)
+				for(k in 1:sumNumNeigh) {
+					weights[k] <- 1
+				}
+
+			# Other priors:
+				alpha0  ~ dflat()  
+				alpha1 ~ dnorm(0.0, 1.0E-5)
+				tau  ~ dgamma(0.5, 0.0005) 				# prior on precision
+				sigma <- sqrt(1 / tau)				# standard deviation
+			   b.mean <- sum(b[])
+			}

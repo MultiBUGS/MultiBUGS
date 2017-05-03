@@ -1,0 +1,40 @@
+			model {
+
+			# Spatially structured multivariate normal likelihood  
+			# exponential correlation function
+				height[1:N] ~ spatial.exp(mu[], x[], y[], tau, phi, kappa)
+			# disc correlation function 
+			#	height[1:N] ~ spatial.disc(mu[], x[], y[], tau, alpha)
+
+				for(i in 1:N) {
+					mu[i] <- beta
+				}
+
+			# Priors
+				beta ~ dflat()
+				tau ~ dgamma(0.001, 0.001) 
+				sigma2 <- 1/tau
+
+			# priors for spatial.exp parameters
+			# prior range for correlation at min distance (0.2 x 50 ft) is 0.02 to 0.99
+				phi ~ dunif(0.05, 20)
+			# prior range for correlation at max distance (8.3 x 50 ft) is 0 to 0.66
+				kappa ~ dunif(0.05,1.95)
+
+			# priors for spatial.disc parameter
+			# prior range for correlation at min distance (0.2 x 50 ft) is 0.07 to 0.96
+			#	alpha ~ dunif(0.25, 48)
+			# prior range for correlation at max distance (8.3 x 50 ft) is 0 to 0.63
+
+			# Spatial prediction
+
+			# Single site prediction
+				for(j in 1:M) {
+					height.pred[j] ~ spatial.unipred(beta, x.pred[j], y.pred[j], height[])
+				}
+
+			# Only use joint prediction for small subset of points, due to length of time it takes to run
+				for(j in 1:10) { mu.pred[j] <- beta }
+					height.pred.multi[1:10] ~ spatial.pred(mu.pred[], x.pred[1:10], y.pred[1:10], height[])   
+				}
+			}

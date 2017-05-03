@@ -1,0 +1,122 @@
+			model {
+
+			# Likelihood
+				for (i in 1 : I) {
+			# convolution likelihood: 
+			#          Y[i] ~ Poisson( sum_ j  { mu[i, j] } )
+			# where mu[i, j] = pop[i] * lambda[i, j] and
+			# pop[i] = (standardised) population (in 100's) in area i
+			# lambda[i, j] = disease rate in area i attributed to jth 'source', where
+			#                     the sources include both observed and latent covariates.
+					Y[i] ~ dpois.conv(mu[i, ])	
+                                            
+				for (j in 1 : J) { 
+			# rescale kernel matrix
+					k1[i, j] <- ker[i, j] / prec
+			# jth 'source' (jth latent spatial grid cell)
+					lambda[i, j] <- beta2 * gamma[j] * k1[i, j]
+				}
+			# (J+1)th 'source' (overall intercept; represents background rate)
+				lambda[i,J+1] <- beta0
+			# (J+2)th 'source' (effect of observed NO2 covariate in area i)
+				lambda[i,J+2] <- beta1 * NO2[i]
+			# Note: if additional covariates have been measured, these 
+			# should be included in the same way as NO2, giving terms
+			# lambda[i, J+3], lambda[i, J+4],.....etc. 
+				for (j in 1 : J+2) {                        
+					mu[i, j] <- lambda[i, j] * pop[i]
+				}
+			}
+					
+			# Priors
+			# See Table 22.1 in Best et al. (2000b) for further details.
+			
+			# Priors for latent spatial grid cell (gamma) parameters:
+			#  
+			# Assume gamma_j ~ gamma(a, t)  
+			# 
+			# Prior shape parameter for gamma distn on gamma[j]'s will change in proportion to
+			# the size of the latent grid cells, to ensure aggregation consistency. The prior inverse
+			# scale parameter for  gamma distn on gamma[j]'s stays constant across different
+			# partitions, but depends on the  units used to measure the area of the latent grid cells:
+			# here we are assuming # 'area'  is in sq kilometres, and we take tauG = 1 (per km^2)
+			# which corresponds to assuming # that our prior guess at the value of the gamma[j]'s
+			# is based on 'observing' about 1 * (area of study region = 30*20km^2) = 600
+			# 'prior points' over the study region. 
+				
+			# Note: area of latent grid cells is read in from data file
+				alphaG <-  tauG * area
+				tauG <- 1          
+       
+				for (j in 1 : J) {
+					gamma[j] ~ dgamma(alphaG, tauG)
+				}
+
+			# Priors for beta coefficients:
+			#
+			# Assume priors on each beta are of the form beta ~ gamma(a, t).
+			#
+			# Here, parameter of the prior are chosen by setting the prior mean to give an equal 
+			# number of cases  allocated to each of the 3 'sources' (baseline, NO2 and latent), i.e.
+			# prior mean   =  a / t  =  a * 3 * Xbar / Ybar,
+			# where Ybar is the overall disease rate in number of cases per unit population,
+			# and Xbar is the population-weighted mean of covariate X. 
+			# 
+			# We also take shape parameter a = 0.575, since this gives  the ratio of the 90th : 10th
+			# percentile of the prior distn = 100, which is suitably diffuse.
+			
+				YBAR <- sum(Y[])/sum(pop[])	# mean number of cases per unit population
+				NO2BAR <- inprod(NO2[], pop[]) / sum(pop[])	# population-weighted mean NO2
+				
+			# Shape parameter for Intercept (beta0)
+				alpha0<- 0.575
+			# Inverse scale parameter for Intercept (beta0)
+				tau0 <- 3 * alpha0 / YBAR
+			# Shape parameter for effect of NO2 (beta1)
+				alpha1<- 0.575
+			# Inverse scale parameter for effect of NO2 (beta1)
+				tau1 <- 3 * alpha1 * NO2BAR / YBAR
+			# Shape parameter for Latent coefficient (beta2)
+				alpha2 <- 0.575
+			# Inverse scale parameter for Latent coefficient (beta2)
+				tau2 <- 3 * alpha2	 / YBAR
+
+				beta0 ~ dgamma(alpha0, tau0)
+				beta1 ~ dgamma(alpha1, tau1)
+				beta2 ~ dgamma(alpha2, tau2)
+
+
+			# Summary quantities for posterior inference 
+				for(i in 1:I) {
+			# Overall disease rate in area i  
+					RATE[i] <- sum(mu[i, ])/pop[i]
+			# Rate associated with latent spatial factor in area i 
+					LATENT[i] <- beta2 * inprod(k1[i,], gamma[])
+				}
+
+			# Expected rate (number of cases per unit population) attributed to each source 
+			# (see Table 22.2 in Best et al (2000b) )
+
+			# Background (overall baseline) rate per 100 population
+			rate.base <- beta0
+
+			# Number of cases per 100 population attributed
+			# to NO2 = beta1 * population-weighted mean value
+			# of NO2 across the study region. 
+				rate.no2 <- beta1 * inprod(pop[], NO2[]) / sum(pop[])
+				
+			# Number of cases per 100 population attributed to 
+			# latent sources = beta2 * population-weighted mean
+			# value of the latent spatial factor (sum_j k_ij gamma_j)
+				rate.latent <- inprod(pop[], LATENT[]) / sum(pop[])
+     
+			# Percentage of cases attributed to each source:
+				Total <- rate.base + rate.no2 + rate.latent   
+			# % cases attributed to baseline risk
+				PC.base <- rate.base / Total * 100
+			# % cases attributed to NO2 exposure
+				PC.no2 <- rate.no2 / Total * 100
+			# % cases attributed to latent spatial factors
+				PC.latent <- rate.latent / Total * 100
+
+			}
