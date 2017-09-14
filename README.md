@@ -1,12 +1,26 @@
 # MultiBUGS
 
-MultiBUGS implements a simple, automatic algorithm for parallelising Markov chain Monte Carlo (MCMC) algorithms for posterior inference of Bayesian hierarchical models. It builds on the existing algorithms and tools in [OpenBUGS](http://www.openbugs.net/), and so is applicable to the broad range of statistical models that can be fitted using BUGS-language software, but automatically parallelises the MCMC algorithm to dramatically speed up computation. This makes modern multi-core computing accessible to applied statisticians, without requiring any experience of parallel programming.
+[MultiBUGS](https://multibugs.github.io) implements a simple, automatic algorithm for parallelising Markov chain Monte Carlo (MCMC) algorithms for posterior inference of Bayesian hierarchical models. It builds on the existing algorithms and tools in [OpenBUGS](http://www.openbugs.net/), and so is applicable to the broad range of statistical models that can be fitted using BUGS-language software, but automatically parallelises the MCMC algorithm to dramatically speed up computation. This makes modern multi-core computing accessible to applied statisticians, without requiring any experience of parallel programming.
+
+See the [MultiBUGS website](https://multibugs.github.io) for further details.
+
+## Citation
+
+Details of the algorithms used by MultiBUG can be found in:
 
 Goudie, R. J. B., Turner, R. M., De Angelis, D., Thomas, A. (2017) Massively parallel MCMC for Bayesian hierarchical models. [arXiv:1704.03216](https://arxiv.org/abs/1704.03216)
 
 ## Installation
 
 MultiBUGS currently works only on Windows. (We hope to port it to Linux in the near future.)
+
+### Installation of current version
+
+See the main [MultiBUGS website](https://multibugs.github.io) for installation instructions of the current released version.
+
+### Installation from source
+
+The MultiBUGS source can be compiled from source and installed using the following steps:
 
 1. Download and install [Microsoft MPI (MS-MPI)](https://msdn.microsoft.com/en-us/library/bb524831(v=vs.85).aspx). This framework allows running parallel applications on the Windows platform.
 
