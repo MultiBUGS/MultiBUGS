@@ -1,0 +1,11 @@
+install:
+  - wget https://github.com/gertvv/odcread/archive/master.zip
+  - unzip master.zip
+  - pushd odcread-master && make && DIR=$PWD
+  - find . -name "*.odc" -exec sh -c 'odcread-master {} > {}.txt; rm {}' \;
+script:
+  - git fetch --unshallow
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: git remote set-url origin https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/MultiBUGS/MultiBUGS-txt.git && (cd $TRAVIS_BUILD_DIR && git filter-branch --tree-filter "find . -name \"*.odc\" -exec sh -c '$DIR/odcread {} > {}.txt; rm {}' \;" -- --all && git push --all --force)
