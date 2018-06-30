@@ -10,5 +10,4 @@ deploy:
   skip_cleanup: true
   script: git remote set-url origin https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/MultiBUGS/MultiBUGS-txt.git && (cd $TRAVIS_BUILD_DIR && git filter-branch --tree-filter "find . -name \"*.odc\" -exec sh -c '$DIR/odcread {} > {}.cp; rm {}' \;" -- --all && git push --all --force)
   on:
-    branches_all: true
-    condition: all
+    all_branches: true
