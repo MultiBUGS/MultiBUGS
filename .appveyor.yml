@@ -1,0 +1,38 @@
+version: 0.9.{build}
+build_script:
+- cmd: >-
+    appveyor AddMessage "Installing BlackBox"
+
+    curl -fsS -o c:\blackbox-1.7.1.zip https://multibugs.github.io/build/blackbox-1.7.1.zip
+
+    7z x c:\blackbox-1.7.1.zip -y -oc:\blackbox
+
+    curl -fsS -o c:\blackbox\bbscript.exe https://multibugs.github.io/build/bbscript.exe
+
+
+    appveyor AddMessage "Installing MS-MPI"
+
+    curl -fsS -o c:\MSMpiSetup.exe https://download.microsoft.com/download/B/2/E/B2EB83FE-98C2-4156-834A-E1711E6884FB/MSMpiSetup.exe
+
+    c:\MSMpiSetup.exe -unattend
+
+    set PATH=C:\Program Files\Microsoft MPI\Bin;%PATH%
+
+
+    appveyor AddMessage "Compiling MultiBUGS modules"
+
+    c:\blackbox\bbscript.exe /USE c:\projects\MultiBUGS /PAR Developer/Make.odc
+
+
+    appveyor AddMessage "Linking MultiBUGS modules"
+
+    c:\blackbox\bbscript.exe /USE c:\projects\MultiBUGS /PAR Developer/LinkingWindows.odc
+
+
+    appveyor AddMessage "Zipping up MultiBUGS"
+
+    7z a %APPVEYOR_BUILD_FOLDER%/MultiBUGS.zip c:\MultiBUGS
+test_script:
+- cmd: appveyor AddTest MultiBUGS -Framework Dummy -Filename dummy.exe -Outcome Ignored
+artifacts:
+- path: MultiBUGS.zip
