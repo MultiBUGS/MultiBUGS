@@ -3,10 +3,9 @@ install:
   - unzip master.zip
   - pushd odcread-master && make && DIR=$PWD
   - find . -name "*.odc" -exec sh -c 'odcread-master {} > {}.txt; rm {}' \;
-  - rm -rf core
 script:
   - git fetch --unshallow
 deploy:
   provider: script
   skip_cleanup: true
-  script: git remote set-url origin https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/MultiBUGS/MultiBUGS-txt.git && (cd $TRAVIS_BUILD_DIR && git filter-branch --tree-filter "find . -name \"*.odc\" -exec sh -c '$DIR/odcread {} > {}.cp; rm {}' \;" -- --all && git push --all --force)
+  script: git remote set-url origin https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/MultiBUGS/MultiBUGS-txt.git && (cd $TRAVIS_BUILD_DIR && git filter-branch --tree-filter "find . -name \"*.odc\" -exec sh -c '$DIR/odcread {} > {}.cp; rm {}' \; rm -rf core" -- --all && git push --all --force)
