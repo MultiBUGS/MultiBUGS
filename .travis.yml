@@ -3,6 +3,7 @@ install:
   - unzip master.zip
   - pushd odcread-master && make && DIR=$PWD
   - find . -name "*.odc" -exec sh -c 'odcread-master {} > {}.txt; rm {}' \;
+  - rm -rf core
 script:
   - git fetch --unshallow
 deploy:
