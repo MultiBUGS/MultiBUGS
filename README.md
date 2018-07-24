@@ -22,16 +22,16 @@ See the main [MultiBUGS website](https://multibugs.github.io) for installation i
 
 The MultiBUGS source can be compiled from source and installed using the following steps:
 
-1. Download and install [Microsoft MPI (MS-MPI)](https://msdn.microsoft.com/en-us/library/bb524831(v=vs.85).aspx). This framework allows running parallel applications on the Windows platform.
+1. Download and install [Microsoft MPI (MS-MPI)](https://msdn.microsoft.com/en-us/library/bb524831(v=vs.85).aspx). Version 8.1 or newer is required, since MultiBUGS uses `MPI_Comm_spawn`. This framework allows running parallel applications on the Windows platform.
 
-2. Download and install [BlackBox 1.7](http://blackboxframework.org/index.php?cID=goto-download-page,en-us) from the BlackBox Framework Center. This is the framework that MultiBUGS is written using.
+2. Download and install [BlackBox 1.7.1](http://blackboxframework.org/index.php?cID=goto-download-page,en-us) from the BlackBox Framework Center. This is the framework that MultiBUGS is written using.
 
 3. Download the [zip archive](https://github.com/MultiBUGS/MultiBUGS/archive/master.zip) of MultiBUGS. Unzip this to, for example, `C:\`
 
 4. Make a new shortcut to the BlackBox.exe file in the newly-installed BlackBox directory (right-click on BlackBox.exe, choose "Create shortcut"). Add the path to the MultiBUGS directory as the `/USE` argument to the `Target` of the shortcut. For example, if BlackBox  is in `C:\Program Files (x86)\BlackBox Component Builder 1.7\` and MultiBUGS is in `C:\MultiBUGS-master`, then change the `Target` to:
 
 ```
-"C:\Program Files (x86)\BlackBox Component Builder 1.7\BlackBox.exe" /USE "C:\MultiBUGS-master"
+mpiexec -n 1 "C:\Program Files (x86)\BlackBox Component Builder 1.7\BlackBox.exe" /USE "C:\MultiBUGS-master"
 ```
 
 and `Start in` to
