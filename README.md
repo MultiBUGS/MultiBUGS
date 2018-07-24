@@ -8,7 +8,7 @@ See the [MultiBUGS website](https://multibugs.github.io) for further details.
 
 Details of the algorithms used by MultiBUGS can be found in:
 
-Goudie, R. J. B., Turner, R. M., De Angelis, D., Thomas, A. (2017) Massively parallel MCMC for Bayesian hierarchical models. [arXiv:1704.03216](https://arxiv.org/abs/1704.03216)
+Goudie, R. J. B., Turner, R. M., De Angelis, D., Thomas, A. (2017) MultiBUGS: Massively parallel MCMC for Bayesian hierarchical models. [arXiv:1704.03216](https://arxiv.org/abs/1704.03216)
 
 ## Installation
 
