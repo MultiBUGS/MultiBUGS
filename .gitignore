@@ -2,3 +2,5 @@ odc*
 Sym
 Code
 *.exe
+StdLog.txt
+*.obj
