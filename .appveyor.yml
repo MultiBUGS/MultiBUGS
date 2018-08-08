@@ -43,6 +43,7 @@ build_script:
     mkdir c:\MultiBUGS\Dynamic\Code
 
     rem Zipping up MultiBUGS
+
     7z a %APPVEYOR_BUILD_FOLDER%/MultiBUGS.zip c:\MultiBUGS
 
     Rscript.exe
