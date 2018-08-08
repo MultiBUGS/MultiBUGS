@@ -1,38 +1,56 @@
 version: 0.9.{build}
+environment:
+  PATH: C:\Program Files\R\R-3.5.1\bin\x64\;$(PATH)
+install:
+- choco install r.project --version 3.5.1
+cache:
+- c:\blackbox -> .appveyor.yml
+- c:\MSMpiSetup.exe -> .appveyor.yml
 build_script:
 - cmd: >-
-    appveyor AddMessage "Installing BlackBox"
-
-    curl -fsS -o c:\blackbox-1.7.1.zip https://multibugs.github.io/build/blackbox-1.7.1.zip
-
-    7z x c:\blackbox-1.7.1.zip -y -oc:\blackbox
-
+    IF NOT EXIST "c:\blackbox" (
+    curl -fsS -o c:\blackbox-1.7.1.zip https://multibugs.github.io/build/blackbox-1.7.1.zip &
+    7z x c:\blackbox-1.7.1.zip -y -oc:\blackbox &
     curl -fsS -o c:\blackbox\bbscript.exe https://multibugs.github.io/build/bbscript.exe
+    )
 
+    rem Installing MS-MPI
 
-    appveyor AddMessage "Installing MS-MPI"
+    rem https://github.com/mpi4py/mpi4py/blob/master/conf/ci/appveyor/install-msmpi.ps1
 
-    curl -fsS -o c:\MSMpiSetup.exe https://download.microsoft.com/download/B/2/E/B2EB83FE-98C2-4156-834A-E1711E6884FB/MSMpiSetup.exe
+    rem this is version 9.0
+
+    IF NOT EXIST "c:\MSMpiSetup.exe" (
+    curl -fsS -o c:\MSMpiSetup.exe https://download.microsoft.com/download/2/E/C/2EC96D7F-687B-4613-80F6-E10F670A2D97/MSMpiSetup.exe
+    )
 
     c:\MSMpiSetup.exe -unattend
 
     set PATH=C:\Program Files\Microsoft MPI\Bin;%PATH%
 
 
-    appveyor AddMessage "Compiling MultiBUGS modules"
+    rem Compiling MultiBUGS modules
 
-    c:\blackbox\bbscript.exe /USE c:\projects\MultiBUGS /PAR Developer/Make.odc
-
-
-    appveyor AddMessage "Linking MultiBUGS modules"
-
-    c:\blackbox\bbscript.exe /USE c:\projects\MultiBUGS /PAR Developer/LinkingWindows.odc
+    c:\blackbox\bbscript.exe /USE %APPVEYOR_BUILD_FOLDER% /PAR Developer/Make.odc
 
 
-    appveyor AddMessage "Zipping up MultiBUGS"
+    rem Linking MultiBUGS modules
 
+    c:\blackbox\bbscript.exe /USE %APPVEYOR_BUILD_FOLDER% /PAR Developer/LinkingWindows.odc
+
+    mkdir c:\MultiBUGS\Dynamic\Sym
+
+    mkdir c:\MultiBUGS\Dynamic\Code
+
+    rem Zipping up MultiBUGS
     7z a %APPVEYOR_BUILD_FOLDER%/MultiBUGS.zip c:\MultiBUGS
+
+    Rscript.exe
+    -e "install.packages(\"devtools\", repos=\"https://cloud.r-project.org\")"
+    -e "devtools:::install_github(\"MultiBUGS/R2MultiBUGS\")"
 test_script:
-- cmd: appveyor AddTest MultiBUGS -Framework Dummy -Filename dummy.exe -Outcome Ignored
+- cmd: >-
+    Rscript.exe -e "library(R2MultiBUGS); validateInstallMultiBUGS(report=\"appveyor\", MultiBUGS.pgm = \"C:/MultiBUGS/MultiBUGS.exe\", n.workers = 1)" &
+    Rscript.exe -e "library(R2MultiBUGS); validateInstallMultiBUGS(report=\"appveyor\", MultiBUGS.pgm = \"C:/MultiBUGS/MultiBUGS.exe\", n.workers = 2)"
 artifacts:
 - path: MultiBUGS.zip
