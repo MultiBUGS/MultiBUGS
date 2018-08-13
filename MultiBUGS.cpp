@@ -64,9 +64,9 @@ int main(int argc, char *argv[]){
   std::string param =
     " -n 1" +
     mpiexec_args +
-    " " +
+    " \"" +
     ExePath() +
-    "/OpenBUGS.exe" +
+    "/OpenBUGS.exe\"" +
     multibugs_args;
 
   // call mpiexec
