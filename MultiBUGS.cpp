@@ -16,7 +16,9 @@
 //
 //
 // Should be compiled with VS using
-// cl /EHsc MultiBUGS.c /link shell32.lib /subsystem:windows /entry:mainCRTStartup
+// rc -fo Win/Rsrc/Bugslogo.res Win/Rsrc/Bugslogo.rc
+// cvtres -machine:ix86 -out:Bugslogo.obj Win/Rsrc/Bugslogo.res
+// cl /EHsc MultiBUGS.cpp /link shell32.lib Bugslogo.obj /subsystem:windows /entry:mainCRTStartup
 
 // Returns path to directory containing this executable
 std::string ExePath() {
