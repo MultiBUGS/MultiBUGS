@@ -64,4 +64,4 @@ The MultiBUGS source can be compiled from source and installed using the followi
 
    (b) Next, open up `BugsRuntime.odc`, which is within the `Rsrc` folder within the `Bugs` folder in the MultiBUGS directory. This opens up the tool that is used to create the self-contained version of MultiBUGS. The path specifies where MultiBUGS will be installed. The other options specify which files are copied to the self-contained installation. Before clicking `ok` to create the self-contained version it is useful to open the Log window (`Info` menu > `Open log`) to make it easy to monitor progress.
 
-   (c) Once this process is complete, `MultiBUGS.exe` within the self-contained version should work, and the BlackBox installed is not required. Note that the first time you compile a model, MultiBUGS will confirm creation of a couple of extra directories. 
+   (c) Once this process is complete, `MultiBUGS.exe` within the self-contained version should work, and the BlackBox installation is not required. Note that the first time you compile a model, MultiBUGS will confirm creation of a couple of extra directories. 
