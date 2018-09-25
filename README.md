@@ -57,3 +57,11 @@ You may want to move the shortcut itself to the Desktop to make it easy to acces
 6. Within MultiBUGS/BlackBox open `Make.odc`, which is found in the `Developer` directory in the MultiBUGS directory. Click on the `!` beside `DevCompiler.CompileThis`. This will compile MultiBUGS. The compiler will ask you to confirm the creation of many directories: click OK to confirm all of these in turn. Compiling will take a couple of minutes. Once compiling is finished the status bar should say "ok".
 
 7. Close BlackBox/MultiBUGS and then reopen it to complete installation. Note that the first time you compile a model, BlackBox/MultiBUGS will confirm creation of a couple of extra directories. The Windows Firewall may also require you to give BlackBox/MultiBUGS permission: this is needed to allow communication between cores.
+
+8. The shortcut link version will now work. If you would also like to create a self-contained compiled version of MultiBUGS (that doesn't need the BlackBox install) and/or use the `MultiBUGS.exe` executable, follow the following steps:
+
+(a) Within MultiBUGS/BlackBox open `Linking.odc`, which is found in the `Developer` directory in the MultiBUGS directory. Click on the first two `!` buttons in the "How to link MultiBUGS" section in turn. This creates `OpenBUGS.exe`, which `MultiBUGS.exe` needs. (More precisely, `MultiBUGS.exe` is just a wrapper around `OpenBUGS.exe` that handles setting up MPI.)
+
+(b) Next, open up `BugsRuntime.odc`, which is within the `Rsrc` folder within the `Bugs` folder in the MultiBUGS directory. This opens up the tool that is used to create the self-contained version of MultiBUGS. The path specifies where MultiBUGS will be installed. The other options specify which files are copied to the self-contained installation. Before clicking `ok` to create the self-contained version it is useful to open the Log window (`Info` menu > `Open log`) to make it easy to monitor progress.
+
+(c) Once this process is complete, `MultiBUGS.exe` within the self-contained version should work, and the BlackBox installed is not required. Note that the first time you compile a model, MultiBUGS will confirm creation of a couple of extra directories. 
