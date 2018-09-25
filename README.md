@@ -40,17 +40,17 @@ The MultiBUGS source can be compiled from source and installed using the followi
 
 4. Make a new shortcut to the BlackBox.exe file in the newly-installed BlackBox directory (right-click on BlackBox.exe, choose "Create shortcut"). Add the path to the MultiBUGS directory as the `/USE` argument to the `Target` of the shortcut. For example, if BlackBox  is in `C:\Program Files (x86)\BlackBox Component Builder 1.7\` and MultiBUGS is in `C:\MultiBUGS-master`, then change the `Target` to:
 
-```
-mpiexec -n 1 "C:\Program Files (x86)\BlackBox Component Builder 1.7\BlackBox.exe" /USE "C:\MultiBUGS-master"
-```
+    ```
+    mpiexec -n 1 "C:\Program Files (x86)\BlackBox Component Builder 1.7\BlackBox.exe" /USE "C:\MultiBUGS-master"
+    ```
 
-and `Start in` to
+    and `Start in` to
 
-```
-"C:\MultiBUGS-master"
-```
+    ```
+    "C:\MultiBUGS-master"
+    ```
 
-You may want to move the shortcut itself to the Desktop to make it easy to access.
+    You may want to move the shortcut itself to the Desktop to make it easy to access.
 
 5. Double click the shortcut to open MultiBUGS/BlackBox.
 
