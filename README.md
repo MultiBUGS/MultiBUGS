@@ -20,8 +20,16 @@ MultiBUGS currently works only on Windows. (We hope to port it to Linux in the n
 
 See the main [MultiBUGS website](https://www.multibugs.org) for installation instructions of the current released version.
 
-### Installation from source
+### Unstable development version
 
+#### Pre-build unstable binaries
+MultiBUGS is automatically built after each commit by Appveyor. The resulting (potentially unstable and broken) development version can be installed by, following the following steps:
+
+1. Download and install [Microsoft MPI (MS-MPI)](https://msdn.microsoft.com/en-us/library/bb524831(v=vs.85).aspx). Version 8.1 or newer is required, since MultiBUGS uses `MPI_Comm_spawn`. This framework allows running parallel applications on the Windows platform.
+
+2. Download the [latest `master` branch build of MultiBUGS](https://ci.appveyor.com/api/projects/MultiBUGS/MultiBUGS/artifacts/MultiBUGS.zip?branch=master) from Appveyor CI. Unzip this to, for example, `C:\Program Files (x86)\MultiBUGS`.
+
+#### Building from source
 The MultiBUGS source can be compiled from source and installed using the following steps:
 
 1. Download and install [Microsoft MPI (MS-MPI)](https://msdn.microsoft.com/en-us/library/bb524831(v=vs.85).aspx). Version 8.1 or newer is required, since MultiBUGS uses `MPI_Comm_spawn`. This framework allows running parallel applications on the Windows platform.
