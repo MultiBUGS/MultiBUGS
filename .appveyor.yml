@@ -1,4 +1,4 @@
-version: 0.9.{build}
+version: 1.0.{build}
 environment:
   PATH: C:\Program Files\R\R-3.5.1\bin\x64\;$(PATH)
 install:
