@@ -9,9 +9,9 @@ cache:
 build_script:
 - cmd: >-
     IF NOT EXIST "c:\blackbox" (
-    curl -fsS -o c:\blackbox-1.7.1.zip https://multibugs.github.io/build/blackbox-1.7.1.zip &
+    curl -fsS -o c:\blackbox-1.7.1.zip https://www.multibugs.org/build/blackbox-1.7.1.zip &
     7z x c:\blackbox-1.7.1.zip -y -oc:\blackbox &
-    curl -fsS -o c:\blackbox\bbscript.exe https://multibugs.github.io/build/bbscript.exe
+    curl -fsS -o c:\blackbox\bbscript.exe https://www.multibugs.org/build/bbscript.exe
     )
 
     rem Installing MS-MPI
