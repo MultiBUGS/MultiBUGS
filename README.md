@@ -1,6 +1,6 @@
 # MultiBUGS
 
-[![Build status](https://ci.appveyor.com/api/projects/status/9ewgftojuttkn9jg/branch/master?svg=true)](https://ci.appveyor.com/project/MultiBUGS/multibugs/branch/master)
+![MultiBUGS logo](https://www.multibugs.org/images/logo.svg) 
 
 [MultiBUGS](https://www.multibugs.org) implements a simple, automatic algorithm for parallelising Markov chain Monte Carlo (MCMC) algorithms for posterior inference of Bayesian hierarchical models. It builds on the existing algorithms and tools in [OpenBUGS](http://www.openbugs.net/), and so is applicable to the broad range of statistical models that can be fitted using BUGS-language software, but automatically parallelises the MCMC algorithm to dramatically speed up computation. This makes modern multi-core computing accessible to applied statisticians, without requiring any experience of parallel programming.
 
@@ -21,6 +21,8 @@ MultiBUGS currently works only on Windows. (We hope to port it to Linux in the n
 See the main [MultiBUGS website](https://www.multibugs.org) for installation instructions of the current released version.
 
 ### Unstable development version
+
+[![Build status](https://ci.appveyor.com/api/projects/status/9ewgftojuttkn9jg/branch/master?svg=true)](https://ci.appveyor.com/project/MultiBUGS/multibugs/branch/master)
 
 #### Pre-build unstable binaries
 MultiBUGS is automatically built after each commit by Appveyor. The resulting (potentially unstable and broken) development version can be installed by, following the following steps:
