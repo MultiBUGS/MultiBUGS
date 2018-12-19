@@ -49,9 +49,10 @@ build_script:
     Rscript.exe
     -e "install.packages(\"devtools\", repos=\"https://cloud.r-project.org\")"
     -e "devtools::install_github(\"MultiBUGS/R2MultiBUGS\")"
+    -e "devtools::install_github(\"MultiBUGS/multibugstests\")"
 test_script:
 - cmd: >-
-    Rscript.exe -e "library(R2MultiBUGS); validateInstallMultiBUGS(report=\"appveyor\", MultiBUGS.pgm = \"C:/MultiBUGS/MultiBUGS.exe\", n.workers = 1)" &
-    Rscript.exe -e "library(R2MultiBUGS); validateInstallMultiBUGS(report=\"appveyor\", MultiBUGS.pgm = \"C:/MultiBUGS/MultiBUGS.exe\", n.workers = 2)"
+    Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 1, report = \"appveyor\")" &
+    Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 2, report = \"appveyor\")"
 artifacts:
 - path: MultiBUGS.zip
