@@ -50,7 +50,7 @@ build_script:
 
     Rscript.exe
     -e "install.packages(\"devtools\", repos=\"https://cloud.r-project.org\")"
-    -e "devtools::install_github(\"MultiBUGS/R2MultiBUGS\")"
+    -e "devtools::install_github(\"MultiBUGS/R2MultiBUGS\", ref = \"v2.0alpha\")"
     -e "devtools::install_github(\"MultiBUGS/multibugstests\")"
 test_script:
 - cmd: >-
