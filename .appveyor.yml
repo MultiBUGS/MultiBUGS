@@ -1,4 +1,4 @@
-version: 1.0.{build}
+version: 2.0.{build}
 environment:
   PATH: C:\Program Files\R\R-3.5.1\bin\x64\;$(PATH)
 install:
@@ -18,10 +18,10 @@ build_script:
 
     rem https://github.com/mpi4py/mpi4py/blob/master/conf/ci/appveyor/install-msmpi.ps1
 
-    rem this is version 9.0
+    rem this is version 10.0
 
     IF NOT EXIST "c:\MSMpiSetup.exe" (
-    curl -fsS -o c:\MSMpiSetup.exe https://download.microsoft.com/download/2/E/C/2EC96D7F-687B-4613-80F6-E10F670A2D97/MSMpiSetup.exe
+    curl -fsS -o c:\MSMpiSetup.exe https://download.microsoft.com/download/A/E/0/AE002626-9D9D-448D-8197-1EA510E297CE/msmpisetup.exe
     )
 
     c:\MSMpiSetup.exe -unattend
@@ -48,10 +48,11 @@ build_script:
 
     Rscript.exe
     -e "install.packages(\"devtools\", repos=\"https://cloud.r-project.org\")"
-    -e "devtools:::install_github(\"MultiBUGS/R2MultiBUGS\")"
+    -e "devtools::install_github(\"MultiBUGS/R2MultiBUGS\", ref = \"v2.0alpha\")"
+    -e "devtools::install_github(\"MultiBUGS/multibugstests\")"
 test_script:
 - cmd: >-
-    Rscript.exe -e "library(R2MultiBUGS); validateInstallMultiBUGS(report=\"appveyor\", MultiBUGS.pgm = \"C:/MultiBUGS/MultiBUGS.exe\", n.workers = 1)" &
-    Rscript.exe -e "library(R2MultiBUGS); validateInstallMultiBUGS(report=\"appveyor\", MultiBUGS.pgm = \"C:/MultiBUGS/MultiBUGS.exe\", n.workers = 2)"
+    Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 2, n.chains = 1, report = \"appveyor\")" &
+    Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 2, n.chains = 2, report = \"appveyor\")"
 artifacts:
 - path: MultiBUGS.zip

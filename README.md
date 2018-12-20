@@ -8,7 +8,7 @@ See the [MultiBUGS website](https://www.multibugs.org) for further details.
 
 Details of the algorithms used by MultiBUGS can be found in:
 
-Goudie, R. J. B., Turner, R. M., De Angelis, D., Thomas, A. (2017) MultiBUGS: A parallel implementation of the BUGS modelling framework for faster Bayesian inference [arXiv:1704.03216](https://arxiv.org/abs/1704.03216)
+Goudie, R. J. B., Turner, R. M., De Angelis, D., Thomas, A. (in press) MultiBUGS: A parallel implementation of the BUGS modelling framework for faster Bayesian inference. Journal of Statistical Software. [arXiv:1704.03216](https://arxiv.org/abs/1704.03216)
 
 ## Installation
 
