@@ -1,5 +1,3 @@
-init:
-  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 version: 1.0.{build}
 environment:
   PATH: C:\Program Files\R\R-3.5.1\bin\x64\;$(PATH)
@@ -54,10 +52,7 @@ build_script:
     -e "devtools::install_github(\"MultiBUGS/multibugstests\")"
 test_script:
 - cmd: >-
-    Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 1, report = \"appveyor\")" &
-    Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 2, report = \"appveyor\")"
+    Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 1, exclude = c(\"Fire\", \"Lizards\"), report = \"appveyor\")" &
+    Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 2, exclude = c(\"Fire\", \"Lizards\"), report = \"appveyor\")"
 artifacts:
 - path: MultiBUGS.zip
-on_finish:
-  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-  
