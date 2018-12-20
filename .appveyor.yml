@@ -21,7 +21,7 @@ build_script:
     rem this is version 9.0
 
     IF NOT EXIST "c:\MSMpiSetup.exe" (
-    curl -fsS -o c:\MSMpiSetup.exe https://download.microsoft.com/download/2/E/C/2EC96D7F-687B-4613-80F6-E10F670A2D97/MSMpiSetup.exe
+    curl -fsS -o c:\MSMpiSetup.exe https://download.microsoft.com/download/A/E/0/AE002626-9D9D-448D-8197-1EA510E297CE/msmpisetup.exe
     )
 
     c:\MSMpiSetup.exe -unattend
