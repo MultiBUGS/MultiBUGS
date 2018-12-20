@@ -1,4 +1,4 @@
-version: 1.0.{build}
+version: 2.0.{build}
 environment:
   PATH: C:\Program Files\R\R-3.5.1\bin\x64\;$(PATH)
 install:
@@ -18,7 +18,7 @@ build_script:
 
     rem https://github.com/mpi4py/mpi4py/blob/master/conf/ci/appveyor/install-msmpi.ps1
 
-    rem this is version 9.0
+    rem this is version 10.0
 
     IF NOT EXIST "c:\MSMpiSetup.exe" (
     curl -fsS -o c:\MSMpiSetup.exe https://download.microsoft.com/download/A/E/0/AE002626-9D9D-448D-8197-1EA510E297CE/msmpisetup.exe
