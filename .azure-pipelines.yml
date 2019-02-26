@@ -1,0 +1,53 @@
+jobs:
+- job: MultiBUGS_Windows
+  strategy:
+    matrix:
+      1workers_2chains:
+        CHAINS: '2'
+        WORKERS: '1'
+      2workers_2chains:
+        CHAINS: '2'
+        WORKERS: '2'
+      3workers_2chains:
+        CHAINS: '2'
+        WORKERS: '3'
+  timeoutInMinutes: 0
+  pool:
+    vmImage: 'windows-2019'
+  steps:
+  - script: |
+      echo on
+      curl -fsS -o c:\MSMpiSetup.exe https://download.microsoft.com/download/A/E/0/AE002626-9D9D-448D-8197-1EA510E297CE/msmpisetup.exe
+      c:\MSMpiSetup.exe -unattend
+      set PATH=C:\Program Files\Microsoft MPI\Bin;%PATH%
+    displayName: Update MS-MPI to version 10
+  - script: |
+      echo on
+      curl -fsS -o c:\blackbox-1.7.1.zip https://www.multibugs.org/build/blackbox-1.7.1.zip
+      7z x c:\blackbox-1.7.1.zip -y -oc:\blackbox
+      curl -fsS -o c:\blackbox\bbscript.exe https://www.multibugs.org/build/bbscript.exe
+      c:\blackbox\bbscript.exe /USE %BUILD_SOURCESDIRECTORY% /PAR Developer/Make.odc
+      c:\blackbox\bbscript.exe /USE %BUILD_SOURCESDIRECTORY% /PAR Developer/LinkingWindows.odc
+      mkdir c:\MultiBUGS\Dynamic\Sym
+      mkdir c:\MultiBUGS\Dynamic\Code
+    displayName: Install BlackBox, Make and Link MultiBUGS
+  - script: |
+      echo on
+      choco install r.project --version 3.5.1 --no-progress
+      set PATH=C:\Program Files\Microsoft MPI\Bin;C:\Program Files\R\R-3.5.1\bin\x64;%PATH%
+      Rscript.exe -e "install.packages(\"devtools\", repos=\"https://cloud.r-project.org\")" -e "install.packages(\"xml2\", repos=\"https://cloud.r-project.org\")" -e "devtools::install_github(\"MultiBUGS/R2MultiBUGS\")" -e "devtools::install_github(\"MultiBUGS/multibugstests\")"
+    displayName: Install R and required packages
+  - script: |
+      echo on
+      set PATH=C:\Program Files\Microsoft MPI\Bin;C:\Program Files\R\R-3.5.1\bin\x64;%PATH%
+      IF "%WORKERS%"=="3" Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 3, n.chains = 2, report = \"junit\")"
+      IF "%WORKERS%"=="2" Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 2, n.chains = 2, report = \"junit\")"
+      IF "%WORKERS%"=="1" Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 1, n.chains = 2, report = \"junit\")"      
+    displayName: Run tests
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: 'C:\MultiBUGS\TESTS-$(WORKERS)workers-$(CHAINS)chains.xml'
+      mergeTestResults: true
+      testRunTitle: '$(WORKERS) workers; $(CHAINS) chains'
+    condition: always()
+    displayName: 'Publish Test Results'
