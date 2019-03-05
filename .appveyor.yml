@@ -53,6 +53,5 @@ build_script:
 test_script:
 - cmd: >-
     Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 2, n.chains = 1, report = \"appveyor\")" &
-    Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 2, n.chains = 2, report = \"appveyor\")"
 artifacts:
 - path: MultiBUGS.zip
