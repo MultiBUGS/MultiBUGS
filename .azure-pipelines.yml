@@ -40,9 +40,12 @@ jobs:
   - script: |
       echo on
       set PATH=C:\Program Files\Microsoft MPI\Bin;C:\Program Files\R\R-3.5.1\bin\x64;%PATH%
-      IF "%WORKERS%"=="3" Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 3, n.chains = 2, report = \"junit\"); bugs_examples_all(n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
-      IF "%WORKERS%"=="2" Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 2, n.chains = 2, report = \"junit\"); bugs_examples_all(n.workers = 2, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
-      IF "%WORKERS%"=="1" Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 1, n.chains = 2, report = \"junit\"); bugs_examples_all(n.workers = 1, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
+      IF "%WORKERS%"=="3" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 3, n.chains = 2, report = \"junit\")" 
+      IF "%WORKERS%"=="2" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 2, n.chains = 2, report = \"junit\")"
+      IF "%WORKERS%"=="1" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 1, n.chains = 2, report = \"junit\")"
+      IF "%WORKERS%"=="3" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
+      IF "%WORKERS%"=="2" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 2, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
+      IF "%WORKERS%"=="1" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 1, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
     displayName: Run tests
   - task: PublishTestResults@2
     inputs:
