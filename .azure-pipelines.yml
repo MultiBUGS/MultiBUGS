@@ -54,3 +54,30 @@ jobs:
       testRunTitle: '$(WORKERS) workers; $(CHAINS) chains'
     condition: always()
     displayName: 'Publish Test Results'
+- job: MultiBUGS_Linux
+  timeoutInMinutes: 0
+  pool:
+    vmImage: 'ubuntu-16.04'
+  steps:
+  - script: | 
+      # Uninstalling these packages is NOT needed for MultiBUGS, but vastly speeds up apt-get update on Azure
+      sudo apt-get -qq remove '^libmono.*' '^mono.*' '^php.*'
+    displayName: Uninstall unnecessary packages
+  - script: | 
+      sudo dpkg --add-architecture i386
+      sudo add-apt-repository -y "deb http://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -sc)/"
+      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+      sudo add-apt-repository -y ppa:marutter/rdev
+      sudo apt-get -qq -y update
+      sudo apt-get -qq -y install r-base mpich:i386 libgtk2.0-0:i386 gtk2-engines:i386 gtk2-engines-murrine:i386 libcanberra-gtk-module:i386 gnome-icon-theme-full
+    displayName: Install R, 32-bit MPICH, and 32-bit GTK libraries
+  - script: | 
+      git clone https://github.com/bbcb/bbcp.git ${AGENT_HOMEDIRECTORY}/bbcb
+      cd ${AGENT_HOMEDIRECTORY}/bbcb/BlackBox
+      ./switch-target `uname -s` GUI
+      ./build
+    displayName: Install BlackBox Cross-Platform
+  - script: | 
+      cd ${BUILD_SOURCESDIRECTORY}
+      # Next build MultiBUGS
+    displayName: Build MultiBUGS
