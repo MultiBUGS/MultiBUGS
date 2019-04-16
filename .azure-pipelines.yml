@@ -79,5 +79,6 @@ jobs:
     displayName: Install BlackBox Cross-Platform
   - script: | 
       cd ${BUILD_SOURCESDIRECTORY}
-      # Next build MultiBUGS
+      Developer/BuildLinux | ${AGENT_HOMEDIRECTORY}/bbcb/BlackBox/run-dev0
+      chmod +x MultiBUGS-binary/OpenBUGS
     displayName: Build MultiBUGS
