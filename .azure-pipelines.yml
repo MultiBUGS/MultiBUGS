@@ -84,8 +84,8 @@ jobs:
       chmod +x MultiBUGS-binary/OpenBUGS
     displayName: Build MultiBUGS
   - script: |
-    mkdir -p $R_LIBS_USER
-    Rscript -e "install.packages(\"devtools\", repos=\"https://cloud.r-project.org\")" -e "install.packages(\"xml2\", repos=\"https://cloud.r-project.org\")" -e "devtools::install_github(\"MultiBUGS/R2MultiBUGS\")" -e "devtools::install_github(\"MultiBUGS/multibugstests\")"
+      mkdir -p ${R_LIBS_USER}
+      Rscript -e "install.packages(\"devtools\", repos=\"https://cloud.r-project.org\")" -e "install.packages(\"xml2\", repos=\"https://cloud.r-project.org\")" -e "devtools::install_github(\"MultiBUGS/R2MultiBUGS\")" -e "devtools::install_github(\"MultiBUGS/multibugstests\")"
     displayName: Install R packages
   - script: |
       Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 1, n.chains = 1, report = \"junit\")"
