@@ -1,8 +1,18 @@
-#include <windows.h>
 #include <string>
+#include <cstring>
+#include <iostream>
+
+#ifdef _WIN32
+#include <windows.h>
 #include <shellapi.h>
 #include <shlobj.h>
-#include <iostream>
+#endif
+
+#ifdef __linux__
+#include <libgen.h>
+#include <unistd.h>
+#include <limits.h>
+#endif
 
 // MultiBUGS.exe is a very simple wrapper to avoid users needing to call
 // mpiexec themselves.
@@ -21,11 +31,21 @@
 // cl /EHsc MultiBUGS.cpp /link shell32.lib Bugslogo.obj /subsystem:windows /entry:mainCRTStartup
 
 // Returns path to directory containing this executable
-std::string ExePath() {
-  char buffer[MAX_PATH];
-  GetModuleFileName(NULL, buffer, MAX_PATH);
-  std::string::size_type pos = std::string(buffer).find_last_of("\\/");
-  return std::string(buffer).substr(0, pos);
+std::string ExePath(){
+  #ifdef _WIN32
+    char buffer[MAX_PATH];
+    GetModuleFileName(NULL, buffer, MAX_PATH);
+    std::string::size_type pos = std::string(buffer).find_last_of("\\/");
+    return std::string(buffer).substr(0, pos);
+  #endif
+  #ifdef __linux__
+    char buff[PATH_MAX];
+    ssize_t len = ::readlink("/proc/self/exe", buff, sizeof(buff)-1);
+    if (len != -1) {
+      buff[len] = '\0';
+      return std::string(dirname(buff));
+    }
+#endif
 }
 
 int main(int argc, char *argv[]){
@@ -62,29 +82,43 @@ int main(int argc, char *argv[]){
     }
   }
 
-  // build full call to mpiexec
-  std::string param =
-    " -n 1" +
-    mpiexec_args +
-    " \"" +
-    ExePath() +
-    "/OpenBUGS.exe\"" +
-    multibugs_args;
+  #ifdef _WIN32
+    // build full call to mpiexec
+    std::string param =
+      " -n 1" +
+      mpiexec_args +
+      " \"" +
+      ExePath() +
+      "/OpenBUGS.exe\"" +
+      multibugs_args;
 
-  // call mpiexec
-  SHELLEXECUTEINFO ShExecInfo = {0};
-  ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
-  ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
-  ShExecInfo.hwnd = NULL;
-  ShExecInfo.lpVerb = "open";
-  ShExecInfo.lpFile = "mpiexec";
-  ShExecInfo.lpParameters = param.c_str();
-  ShExecInfo.lpDirectory = NULL;
-  ShExecInfo.nShow = SW_HIDE;
-  ShExecInfo.hInstApp = NULL;
-  ShellExecuteEx(&ShExecInfo);
+    // call mpiexec
+    SHELLEXECUTEINFO ShExecInfo = {0};
+    ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
+    ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
+    ShExecInfo.hwnd = NULL;
+    ShExecInfo.lpVerb = "open";
+    ShExecInfo.lpFile = "mpiexec";
+    ShExecInfo.lpParameters = param.c_str();
+    ShExecInfo.lpDirectory = NULL;
+    ShExecInfo.nShow = SW_HIDE;
+    ShExecInfo.hInstApp = NULL;
+    ShellExecuteEx(&ShExecInfo);
 
-  // wait till mpiexec is finished
-  WaitForSingleObject(ShExecInfo.hProcess,INFINITE);
-  CloseHandle(ShExecInfo.hProcess);
+    // wait till mpiexec is finished
+    WaitForSingleObject(ShExecInfo.hProcess,INFINITE);
+    CloseHandle(ShExecInfo.hProcess);
+  #endif
+
+  #ifdef __linux__
+    // build full call to mpiexec
+    std::string param =
+      "mpiexec -n 1" +
+      mpiexec_args +
+      " \"" +
+      ExePath() +
+      "/OpenBUGS\"" +
+      multibugs_args;
+    system(param.c_str());
+#endif
 }
