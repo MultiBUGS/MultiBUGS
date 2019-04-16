@@ -69,7 +69,7 @@ jobs:
       sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
       sudo add-apt-repository -y ppa:marutter/rdev
       sudo apt-get -qq -y update
-      sudo apt-get -qq -y install r-base mpich:i386 libgtk2.0-0:i386 gtk2-engines:i386 gtk2-engines-murrine:i386 libcanberra-gtk-module:i386 gnome-icon-theme-full
+      sudo apt-get -qq -y install r-base r-base-dev mpich:i386 libgtk2.0-0:i386 gtk2-engines:i386 gtk2-engines-murrine:i386 libcanberra-gtk-module:i386 gnome-icon-theme-full
     displayName: Install R, 32-bit MPICH, and 32-bit GTK libraries
   - script: | 
       git clone https://github.com/bbcb/bbcp.git ${AGENT_HOMEDIRECTORY}/bbcb
@@ -84,7 +84,8 @@ jobs:
       chmod +x MultiBUGS-binary/OpenBUGS
     displayName: Build MultiBUGS
   - script: |
-      Rscript -e "install.packages(\"devtools\", repos=\"https://cloud.r-project.org\")" -e "install.packages(\"xml2\", repos=\"https://cloud.r-project.org\")" -e "devtools::install_github(\"MultiBUGS/R2MultiBUGS\")" -e "devtools::install_github(\"MultiBUGS/multibugstests\")"
+    mkdir -p $R_LIBS_USER
+    Rscript -e "install.packages(\"devtools\", repos=\"https://cloud.r-project.org\")" -e "install.packages(\"xml2\", repos=\"https://cloud.r-project.org\")" -e "devtools::install_github(\"MultiBUGS/R2MultiBUGS\")" -e "devtools::install_github(\"MultiBUGS/multibugstests\")"
     displayName: Install R packages
   - script: |
       Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 1, n.chains = 1, report = \"junit\")"
