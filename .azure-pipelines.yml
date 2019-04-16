@@ -79,6 +79,20 @@ jobs:
     displayName: Install BlackBox Cross-Platform
   - script: | 
       cd ${BUILD_SOURCESDIRECTORY}
+      g++ -o MultiBUGS MultiBUGS.cpp
       Developer/BuildLinux | ${AGENT_HOMEDIRECTORY}/bbcb/BlackBox/run-dev0
       chmod +x MultiBUGS-binary/OpenBUGS
     displayName: Build MultiBUGS
+  - script: |
+      Rscript -e "install.packages(\"devtools\", repos=\"https://cloud.r-project.org\")" -e "install.packages(\"xml2\", repos=\"https://cloud.r-project.org\")" -e "devtools::install_github(\"MultiBUGS/R2MultiBUGS\")" -e "devtools::install_github(\"MultiBUGS/multibugstests\")"
+    displayName: Install R packages
+  - script: |
+      Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 1, n.chains = 1, report = \"junit\")"
+    displayName: Run tests
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: 'C:\MultiBUGS\TESTS-*$(WORKERS)workers-$(CHAINS)chains.xml'
+      mergeTestResults: true
+      testRunTitle: '$(WORKERS) workers; $(CHAINS) chains'
+    condition: always()
+    displayName: 'Publish Test Results'
