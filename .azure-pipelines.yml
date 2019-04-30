@@ -40,7 +40,7 @@ jobs:
   - script: |
       echo on
       set PATH=C:\Program Files\Microsoft MPI\Bin;C:\Program Files\R\R-3.5.1\bin\x64;%PATH%
-      IF "%WORKERS%"=="3" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 3, n.chains = 2, report = \"junit\")" 
+      IF "%WORKERS%"=="3" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 3, n.chains = 2, report = \"junit\")"
       IF "%WORKERS%"=="2" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 2, n.chains = 2, report = \"junit\")"
       IF "%WORKERS%"=="1" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 1, n.chains = 2, report = \"junit\")"
       IF "%WORKERS%"=="3" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
@@ -55,41 +55,189 @@ jobs:
     condition: always()
     displayName: 'Publish Test Results'
 - job: MultiBUGS_Linux
+  strategy:
+    matrix:
+      1workers_2chains:
+        CHAINS: '2'
+        WORKERS: '1'
+      2workers_2chains:
+        CHAINS: '2'
+        WORKERS: '2'
+      3workers_2chains:
+        CHAINS: '2'
+        WORKERS: '3'
   timeoutInMinutes: 0
   pool:
     vmImage: 'ubuntu-16.04'
   steps:
-  - script: | 
+  - script: |
       # Uninstalling these packages is NOT needed for MultiBUGS, but vastly speeds up apt-get update on Azure
       sudo apt-get -qq remove '^libmono.*' '^mono.*' '^php.*'
     displayName: Uninstall unnecessary packages
-  - script: | 
+  - script: |
       sudo dpkg --add-architecture i386
-      sudo add-apt-repository -y "deb http://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -sc)/"
+      sudo add-apt-repository -y "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -sc)-cran35/"
       sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
-      sudo add-apt-repository -y ppa:marutter/rdev
       sudo apt-get -qq -y update
-      sudo apt-get -qq -y install r-base r-base-dev mpich:i386 libgtk2.0-0:i386 gtk2-engines:i386 gtk2-engines-murrine:i386 libcanberra-gtk-module:i386 gnome-icon-theme-full
+      sudo apt-get install r-base libgtk2.0-0:i386 gtk2-engines:i386 gtk2-engines-murrine:i386 libcanberra-gtk-module:i386 gnome-icon-theme-full
+      sudo apt-get install r-base-dev
+      # mpich installs libmpich12 which supplies libmpich.so.12
+      sudo apt-get install mpich:i386
+      # for building MultiBUGS.cpp
+      sudo apt-get install g++-multilib
+      # By default, R_LIBS_USERS is not set, so need to allow package installation to site-library
+      sudo chmod o+w /usr/local/lib/R/site-library
     displayName: Install R, 32-bit MPICH, and 32-bit GTK libraries
-  - script: | 
+  - script: |
       git clone https://github.com/bbcb/bbcp.git ${AGENT_HOMEDIRECTORY}/bbcb
       cd ${AGENT_HOMEDIRECTORY}/bbcb/BlackBox
       ./switch-target `uname -s` GUI
       ./build
     displayName: Install BlackBox Cross-Platform
-  - script: | 
+  - script: |
       cd ${BUILD_SOURCESDIRECTORY}
-      g++ -o MultiBUGS MultiBUGS.cpp
-      Developer/BuildLinux | ${AGENT_HOMEDIRECTORY}/bbcb/BlackBox/run-dev0
+      g++ -m32 -o MultiBUGS MultiBUGS.cpp
+      BBINSTALLDIR="${AGENT_HOMEDIRECTORY}/bbcb/BlackBox"
+      Developer/BuildLinux | ${BBINSTALLDIR}/run-dev0
+      cp -r ${BBINSTALLDIR}/Cons MultiBUGS-binary/
+      mkdir -p MultiBUGS-binary/Bugs/Code
+      mkdir -p MultiBUGS-binary/Compare/Code
+      mkdir -p MultiBUGS-binary/Correl/Code
+      mkdir -p MultiBUGS-binary/Dev/Code
+      mkdir -p MultiBUGS-binary/Deviance/Code
+      mkdir -p MultiBUGS-binary/Diff/Code
+      mkdir -p MultiBUGS-binary/Doodle/Code
+      mkdir -p MultiBUGS-binary/Dynamic/Code
+      mkdir -p MultiBUGS-binary/Graph/Code
+      mkdir -p MultiBUGS-binary/Html/Code
+      mkdir -p MultiBUGS-binary/Maps/Code
+      mkdir -p MultiBUGS-binary/Math/Code
+      mkdir -p MultiBUGS-binary/Models/Code
+      mkdir -p MultiBUGS-binary/Monitor/Code
+      mkdir -p MultiBUGS-binary/Parallel/Code
+      mkdir -p MultiBUGS-binary/Pharmaco/Code
+      mkdir -p MultiBUGS-binary/PKBugs/Code
+      mkdir -p MultiBUGS-binary/Plots/Code
+      mkdir -p MultiBUGS-binary/Ranks/Code
+      mkdir -p MultiBUGS-binary/Reliability/Code
+      mkdir -p MultiBUGS-binary/Samples/Code
+      mkdir -p MultiBUGS-binary/Spatial/Code
+      mkdir -p MultiBUGS-binary/Summary/Code
+      mkdir -p MultiBUGS-binary/Test/Code
+      mkdir -p MultiBUGS-binary/Updater/Code
+      mkdir -p MultiBUGS-binary/Form/Code
+      mkdir -p MultiBUGS-binary/Host/Code
+      mkdir -p MultiBUGS-binary/Lin/Code
+      mkdir -p MultiBUGS-binary/Ole/Code
+      mkdir -p MultiBUGS-binary/Std/Code
+      mkdir -p MultiBUGS-binary/System/Code
+      mkdir -p MultiBUGS-binary/Text/Code
+      mkdir -p MultiBUGS-binary/Win/Code
+      mkdir -p MultiBUGS-binary/Xhtml/Code
+      mkdir -p MultiBUGS-binary/Dev2/Code
+      mkdir -p MultiBUGS-binary/Gtk2/Code
+      mkdir -p MultiBUGS-binary/Code
+      mkdir -p MultiBUGS-binary/Cons
+      cp -r ${BBINSTALLDIR}/Form/Code/*.ocf MultiBUGS-binary/Form/Code
+      cp -r ${BBINSTALLDIR}/Host/Code/*.ocf MultiBUGS-binary/Host/Code
+      #cp -r ${BBINSTALLDIR}/Lin/Code/*.ocf MultiBUGS-binary/Lin/Code
+      #cp -r ${BBINSTALLDIR}/Ole/Code/*.ocf MultiBUGS-binary/Ole/Code
+      cp -r ${BBINSTALLDIR}/Std/Code/*.ocf MultiBUGS-binary/Std/Code
+      #cp -r ${BBINSTALLDIR}/System/Code/*.ocf MultiBUGS-binary/System/Code
+      cp -r ${BBINSTALLDIR}/Text/Code/*.ocf MultiBUGS-binary/Text/Code
+      #cp -r ${BBINSTALLDIR}/Win/Code/*.ocf MultiBUGS-binary/Win/Code
+      cp -r ${BBINSTALLDIR}/Xhtml/Code/*.ocf MultiBUGS-binary/Xhtml/Code
+      cp -r ${BBINSTALLDIR}/Dev2/Code/*.ocf MultiBUGS-binary/Dev2/Code
+      cp -r ${BBINSTALLDIR}/Gtk2/Code/*.ocf MultiBUGS-binary/Gtk2/Code
+      cp -r ${BBINSTALLDIR}/Code/*.ocf MultiBUGS-binary/Code
+      cp -r ${BBINSTALLDIR}/Cons/Code/*.ocf MultiBUGS-binary/Cons/Code
+      cp -r Form/Code/*.ocf MultiBUGS-binary/Form/Code
+      cp -r Host/Code/*.ocf MultiBUGS-binary/Host/Code
+      #cp -r Lin/Code/*.ocf MultiBUGS-binary/Lin/Code
+      #cp -r Ole/Code/*.ocf MultiBUGS-binary/Ole/Code
+      cp -r Std/Code/*.ocf MultiBUGS-binary/Std/Code
+      #cp -r System/Code/*.ocf MultiBUGS-binary/System/Code
+      cp -r Text/Code/*.ocf MultiBUGS-binary/Text/Code
+      #cp -r Win/Code/*.ocf MultiBUGS-binary/Win/Code
+      cp -r Xhtml/Code/*.ocf MultiBUGS-binary/Xhtml/Code
+      cp -r Dev2/Code/*.ocf MultiBUGS-binary/Dev2/Code
+      cp -r Gtk2/Code/*.ocf MultiBUGS-binary/Gtk2/Code
+      cp -r Code/*.ocf MultiBUGS-binary/Code
+      cp -r Cons/*.ocf MultiBUGS-binary/Cons
+      cp -r Bugs/Code/*.ocf MultiBUGS-binary/Bugs/Code
+      cp -r Compare/Code/*.ocf MultiBUGS-binary/Compare/Code
+      cp -r Correl/Code/*.ocf MultiBUGS-binary/Correl/Code
+      cp -r Dev/Code/*.ocf MultiBUGS-binary/Dev/Code
+      cp -r Deviance/Code/*.ocf MultiBUGS-binary/Deviance/Code
+      cp -r Diff/Code/*.ocf MultiBUGS-binary/Diff/Code
+      cp -r Doodle/Code/*.ocf MultiBUGS-binary/Doodle/Code
+      #cp -r Dynamic/Code/*.ocf MultiBUGS-binary/Dynamic/Code
+      cp -r Graph/Code/*.ocf MultiBUGS-binary/Graph/Code
+      #cp -r Html/Code/*.ocf MultiBUGS-binary/Html/Code
+      cp -r Maps/Code/*.ocf MultiBUGS-binary/Maps/Code
+      cp -r Math/Code/*.ocf MultiBUGS-binary/Math/Code
+      cp -r Models/Code/*.ocf MultiBUGS-binary/Models/Code
+      cp -r Monitor/Code/*.ocf MultiBUGS-binary/Monitor/Code
+      cp -r Parallel/Code/*.ocf MultiBUGS-binary/Parallel/Code
+      cp -r Pharmaco/Code/*.ocf MultiBUGS-binary/Pharmaco/Code
+      cp -r PKBugs/Code/*.ocf MultiBUGS-binary/PKBugs/Code
+      cp -r Plots/Code/*.ocf MultiBUGS-binary/Plots/Code
+      cp -r Ranks/Code/*.ocf MultiBUGS-binary/Ranks/Code
+      cp -r Reliability/Code/*.ocf MultiBUGS-binary/Reliability/Code
+      cp -r Samples/Code/*.ocf MultiBUGS-binary/Samples/Code
+      cp -r Spatial/Code/*.ocf MultiBUGS-binary/Spatial/Code
+      cp -r Summary/Code/*.ocf MultiBUGS-binary/Summary/Code
+      cp -r Test/Code/*.ocf MultiBUGS-binary/Test/Code
+      cp -r Updater/Code/*.ocf MultiBUGS-binary/Updater/Code
+      mkdir -p MultiBUGS-binary/Math/Sym
+      mkdir -p MultiBUGS-binary/Graph/Sym
+      mkdir -p MultiBUGS-binary/Sym
+      cp Math/Sym/Func.osf MultiBUGS-binary/Math/Sym/Func.osf
+      cp Graph/Sym/Logical.osf MultiBUGS-binary/Graph/Sym/Logical.osf
+      cp Graph/Sym/Nodes.osf MultiBUGS-binary/Graph/Sym/Nodes.osf
+      cp Graph/Sym/Rules.osf MultiBUGS-binary/Graph/Sym/Rules.osf
+      cp Graph/Sym/Scalar.osf MultiBUGS-binary/Graph/Sym/Scalar.osf
+      cp Graph/Sym/Stochastic.osf MultiBUGS-binary/Graph/Sym/Stochastic.osf
+      #cp System/Sym/Math.osf MultiBUGS-binary/System/Sym/Math.osf
+      #cp System/Sym/Stores.osf MultiBUGS-binary/System/Sym/Stores.osf
+      cp Sym/Math.osf MultiBUGS-binary/Sym/Math.osf
+      cp Sym/Stores.osf MultiBUGS-binary/Sym/Stores.osf
       chmod +x MultiBUGS-binary/OpenBUGS
+      chmod +x MultiBUGS-binary/MultiBUGS
+      chmod +x MultiBUGS-binary/run-MultiBUGS
     displayName: Build MultiBUGS
   - script: |
-      mkdir -p ${R_LIBS_USER}
+      # needed for devtools
+      sudo apt-get update
+      sudo apt-get install libcurl4-openssl-dev
+      sudo apt-get install libssl-dev
+      sudo apt-get install libgit2-dev
+      sudo apt-get install libssh2-1-dev
       Rscript -e "install.packages(\"devtools\", repos=\"https://cloud.r-project.org\")" -e "install.packages(\"xml2\", repos=\"https://cloud.r-project.org\")" -e "devtools::install_github(\"MultiBUGS/R2MultiBUGS\")" -e "devtools::install_github(\"MultiBUGS/multibugstests\")"
     displayName: Install R packages
   - script: |
-      Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 1, n.chains = 1, report = \"junit\")"
+      Xvfb :99 -screen 0 1024x768x24 </dev/null &
+      sleep 5
+      export DISPLAY=":99"
+      cd ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary
+      if [ "$WORKERS" == "1" ]; then
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 1, n.chains = 2, report = \"junit\")"
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 1, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
+      fi
+      if [ "$WORKERS" == "2" ]; then
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 2, n.chains = 2, report = \"junit\")"
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 2, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
+      fi
+      if [ "$WORKERS" == "3" ]; then
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 3, n.chains = 2, report = \"junit\")"
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
+      fi
+      DISPLAY=:99 import -window root screenshot.png
     displayName: Run tests
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'artifactName'
+      targetPath: '$(Build.SourcesDirectory)/MultiBUGS-binary/screenshot.png'
   - task: PublishTestResults@2
     inputs:
       testResultsFiles: 'C:\MultiBUGS\TESTS-*$(WORKERS)workers-$(CHAINS)chains.xml'
