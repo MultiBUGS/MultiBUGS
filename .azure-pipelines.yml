@@ -206,6 +206,7 @@ jobs:
       cp Sym/Stores.osf MultiBUGS-binary/Sym/Stores.osf
       chmod +x MultiBUGS-binary/OpenBUGS
       chmod +x MultiBUGS-binary/MultiBUGS
+      chmod +x MultiBUGS-binary/run-MultiBUGS
       ls
       ls MultiBUGS-binary
     displayName: Build MultiBUGS
