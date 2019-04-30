@@ -96,7 +96,9 @@ jobs:
     displayName: Install BlackBox Cross-Platform
   - script: |
       cd ${BUILD_SOURCESDIRECTORY}
+      pwd
       g++ -m32 -o MultiBUGS MultiBUGS.cpp
+      ls
       BBINSTALLDIR="${AGENT_HOMEDIRECTORY}/bbcb/BlackBox"
       Developer/BuildLinux | ${BBINSTALLDIR}/run-dev0
       cp -r ${BBINSTALLDIR}/Cons MultiBUGS-binary/
@@ -204,6 +206,8 @@ jobs:
       cp Sym/Stores.osf MultiBUGS-binary/Sym/Stores.osf
       chmod +x MultiBUGS-binary/OpenBUGS
       chmod +x MultiBUGS-binary/MultiBUGS
+      ls
+      ls MultiBUGS-binary
     displayName: Build MultiBUGS
   - script: |
       # needed for devtools
@@ -219,6 +223,8 @@ jobs:
       sleep 5
       export DISPLAY=":99"
       cd ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary
+      ls
+      ls ../
       if [ "$WORKERS" == "1" ]; then
         Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 1, n.chains = 2, report = \"junit\")"
         Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 1, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
