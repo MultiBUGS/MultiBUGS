@@ -9,6 +9,7 @@
 #endif
 
 #ifdef __linux__
+#include <cstdlib>
 #include <libgen.h>
 #include <unistd.h>
 #include <limits.h>
@@ -119,6 +120,6 @@ int main(int argc, char *argv[]){
       ExePath() +
       "/OpenBUGS\"" +
       multibugs_args;
-    system(param.c_str());
+    std::system(param.c_str());
 #endif
 }
