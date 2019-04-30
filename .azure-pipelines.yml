@@ -96,9 +96,7 @@ jobs:
     displayName: Install BlackBox Cross-Platform
   - script: |
       cd ${BUILD_SOURCESDIRECTORY}
-      pwd
       g++ -m32 -o MultiBUGS MultiBUGS.cpp
-      ls
       BBINSTALLDIR="${AGENT_HOMEDIRECTORY}/bbcb/BlackBox"
       Developer/BuildLinux | ${BBINSTALLDIR}/run-dev0
       cp -r ${BBINSTALLDIR}/Cons MultiBUGS-binary/
@@ -207,8 +205,6 @@ jobs:
       chmod +x MultiBUGS-binary/OpenBUGS
       chmod +x MultiBUGS-binary/MultiBUGS
       chmod +x MultiBUGS-binary/run-MultiBUGS
-      ls
-      ls MultiBUGS-binary
     displayName: Build MultiBUGS
   - script: |
       # needed for devtools
@@ -224,26 +220,24 @@ jobs:
       sleep 5
       export DISPLAY=":99"
       cd ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary
-      ls
-      ls ../
       if [ "$WORKERS" == "1" ]; then
         Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 1, n.chains = 2, report = \"junit\")"
-        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 1, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 1, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/Reliability/Examples/\")"
       fi
       if [ "$WORKERS" == "2" ]; then
         Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 2, n.chains = 2, report = \"junit\")"
-        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 2, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 2, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/Reliability/Examples/\")"
       fi
       if [ "$WORKERS" == "3" ]; then
         Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 3, n.chains = 2, report = \"junit\")"
-        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/Reliability/Examples/\")"
       fi
       DISPLAY=:99 import -window root screenshot-${WORKERS}workers-${CHAINS}chains.png
     displayName: Run tests
   - task: PublishPipelineArtifact@0
     inputs:
       artifactName: 'Screenshot with $(WORKERS) workers and $(CHAINS) chains'
-      targetPath: '$(Build.SourcesDirectory)/MultiBUGS-binary/screenshot-$(WORKERS)-$(CHAINS)chains.png'
+      targetPath: '$(Build.SourcesDirectory)/MultiBUGS-binary/screenshot-$(WORKERS)workers-$(CHAINS)chains.png'
     displayName: Publish screenshot of final result
   - task: PublishTestResults@2
     inputs:
