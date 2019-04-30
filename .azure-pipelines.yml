@@ -232,12 +232,13 @@ jobs:
         Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 3, n.chains = 2, report = \"junit\")"
         Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
       fi
-      DISPLAY=:99 import -window root screenshot.png
+      DISPLAY=:99 import -window root screenshot-${WORKERS}workers-${CHAINS}chains.png
     displayName: Run tests
   - task: PublishPipelineArtifact@0
     inputs:
-      artifactName: 'artifactName'
-      targetPath: '$(Build.SourcesDirectory)/MultiBUGS-binary/screenshot.png'
+      artifactName: 'Screenshot with $(WORKERS) workers and $(CHAINS) chains'
+      targetPath: '$(Build.SourcesDirectory)/MultiBUGS-binary/screenshot-$(WORKERS)-$(CHAINS)chains.png'
+    displayName: Publish screenshot of final result
   - task: PublishTestResults@2
     inputs:
       testResultsFiles: 'C:\MultiBUGS\TESTS-*$(WORKERS)workers-$(CHAINS)chains.xml'
