@@ -46,6 +46,9 @@ jobs:
       IF "%WORKERS%"=="3" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
       IF "%WORKERS%"=="2" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 2, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
       IF "%WORKERS%"=="1" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 1, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
+      IF "%WORKERS%"=="3" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\")"
+      IF "%WORKERS%"=="2" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 2, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\")"
+      IF "%WORKERS%"=="1" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 1, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\")"
     displayName: Run tests
   - task: PublishTestResults@2
     inputs:
@@ -223,14 +226,17 @@ jobs:
       if [ "$WORKERS" == "1" ]; then
         Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 1, n.chains = 2, report = \"junit\")"
         Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 1, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/Reliability/Examples/\")"
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 1, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/GeoBUGS/Examples/\")"
       fi
       if [ "$WORKERS" == "2" ]; then
         Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 2, n.chains = 2, report = \"junit\")"
         Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 2, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/Reliability/Examples/\")"
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 2, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/GeoBUGS/Examples/\")"
       fi
       if [ "$WORKERS" == "3" ]; then
         Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 3, n.chains = 2, report = \"junit\")"
         Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/Reliability/Examples/\")"
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/GeoBUGS/Examples/\")"
       fi
       DISPLAY=:99 import -window root screenshot-${WORKERS}workers-${CHAINS}chains.png
     displayName: Run tests
@@ -241,7 +247,7 @@ jobs:
     displayName: Publish screenshot of final result
   - task: PublishTestResults@2
     inputs:
-      testResultsFiles: '$(Build.SourcesDirectory)/MultiBUGS-binary/TESTS-$(WORKERS)workers-$(CHAINS)chains.xml'
+      testResultsFiles: '$(Build.SourcesDirectory)/MultiBUGS-binary/TESTS-*$(WORKERS)workers-$(CHAINS)chains.xml'
       mergeTestResults: true
       testRunTitle: '$(WORKERS) workers; $(CHAINS) chains'
     condition: always()
