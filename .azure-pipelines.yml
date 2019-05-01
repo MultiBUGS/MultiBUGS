@@ -241,7 +241,7 @@ jobs:
     displayName: Publish screenshot of final result
   - task: PublishTestResults@2
     inputs:
-      testResultsFiles: 'C:\MultiBUGS\TESTS-$(WORKERS)workers-$(CHAINS)chains.xml'
+      testResultsFiles: '$(Build.SourcesDirectory)/MultiBUGS-binary/TESTS-$(WORKERS)workers-$(CHAINS)chains.xml'
       mergeTestResults: true
       testRunTitle: '$(WORKERS) workers; $(CHAINS) chains'
     condition: always()
