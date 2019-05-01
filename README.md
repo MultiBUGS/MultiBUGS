@@ -4,33 +4,41 @@
 
 See the [MultiBUGS website](https://www.multibugs.org) for further details.
 
+## Contents
+
+- [Citation](#citation)
+- [Installation](#installation)
+- [Pre-built unstable binaries](#pre-built-unstable-binaries)
+- [Compiling from source](#compiling-from-source)
+
 ## Citation
 
-Details of the algorithms used by MultiBUGS can be found in:
+If you use MultiBUGS in your published work, please cite
 
 Goudie, R. J. B., Turner, R. M., De Angelis, D., Thomas, A. (in press) MultiBUGS: A parallel implementation of the BUGS modelling framework for faster Bayesian inference. Journal of Statistical Software. [arXiv:1704.03216](https://arxiv.org/abs/1704.03216)
 
 ## Installation
 
-MultiBUGS currently works only on Windows. (We hope to port it to Linux in the near future.)
-
-### Installation of current version
-
 See the main [MultiBUGS website](https://www.multibugs.org) for installation instructions of the current released version.
+The current released version of MultiBUGS works only on Windows and requires [Microsoft MPI (MSI-MPI)](https://msdn.microsoft.com/en-us/library/bb524831(v=vs.85).aspx) (>= v8.1).
 
-### Unstable development version
+## Pre-built unstable development versions
 
 [![Build status](https://ci.appveyor.com/api/projects/status/9ewgftojuttkn9jg/branch/master?svg=true)](https://ci.appveyor.com/project/MultiBUGS/multibugs/branch/master)
 
-#### Pre-build unstable binaries
-MultiBUGS is automatically built after each commit by Appveyor. The resulting (potentially unstable and broken) development version can be installed by, following the following steps:
+### Windows pre-built unstable binaries
 
-1. Download and install [Microsoft MPI (MS-MPI)](https://docs.microsoft.com/en-us/message-passing-interface/microsoft-mpi#ms-mpi-downloads). Version 8.1 or newer is required, since MultiBUGS uses `MPI_Comm_spawn`. This framework allows running parallel applications on the Windows platform.
+1. Download and install [Microsoft MPI (MS-MPI)](https://docs.microsoft.com/en-us/message-passing-interface/microsoft-mpi#ms-mpi-downloads) (v8.1 or newer)
 
-2. Download the [latest `master` branch build of MultiBUGS](https://ci.appveyor.com/api/projects/MultiBUGS/MultiBUGS/artifacts/MultiBUGS.zip?branch=master) from Appveyor CI. Unzip this to, for example, `C:\Program Files (x86)\MultiBUGS`.
+2. Download the [latest `master` branch build of MultiBUGS](https://ci.appveyor.com/api/projects/MultiBUGS/MultiBUGS/artifacts/MultiBUGS.zip?branch=master). Unzip this to, e.g., `C:\Program Files (x86)\MultiBUGS`.
 
-#### Building from source
-The MultiBUGS source can be compiled from source and installed using the following steps:
+### Linux pre-built unstable binaries
+
+Pre-built Linux binaries in preparation
+
+## Compiling from source
+
+### Compiling from source on Windows
 
 1. Download and install [Microsoft MPI (MS-MPI)](https://docs.microsoft.com/en-us/message-passing-interface/microsoft-mpi#ms-mpi-downloads). Version 8.1 or newer is required, since MultiBUGS uses `MPI_Comm_spawn`. This framework allows running parallel applications on the Windows platform.
 
@@ -65,3 +73,34 @@ The MultiBUGS source can be compiled from source and installed using the followi
    (b) Next, open up `BugsPackage.odc`, which is within the `Rsrc` folder within the `Bugs` folder in the MultiBUGS directory. This opens up the tool that is used to create the self-contained version of MultiBUGS. The path specifies where MultiBUGS will be installed. The other options specify which files are copied to the self-contained installation. Before clicking `ok` to create the self-contained version it is useful to open the Log window (`Info` menu > `Open log`) to make it easy to monitor progress.
 
    (c) Once this process is complete, `MultiBUGS.exe` within the self-contained version should work, and the BlackBox installation is not required. Note that the first time you compile a model, MultiBUGS will confirm creation of a couple of extra directories. 
+
+### Compiling from source on Linux
+
+On Debian/Ubuntu-based systems
+
+1. Install [BlackBox Cross-Platform](https://blackbox.obertone.ru/download).
+
+2. Install 32-bit [MPICH](https://www.mpich.org)
+
+    ```
+    sudo apt install mpich:i386
+    ```
+
+3. Download the current `master` branch and open BlackBox (`bbcb`).
+
+    ```
+    wget https://github.com/MultiBUGS/MultiBUGS/archive/master.tar.gz
+    tar -xzf master.tar.gz
+    cd MultiBUGS-master
+    bbcb
+    ```
+
+4. Open `MPIliblinux.odc` within `Mod` within `System`. Edit the name of the shared object to match that on your install of libmpich. (This will be automated in the future.)
+
+5. Within MultiBUGS/BlackBox open `MakeLinux.odc`, which is found in the `Developer` directory in the MultiBUGS directory. Click on the `!` beside `DevCompiler.CompileThis`. This will compile MultiBUGS. Once compiling is finished the status bar should say "ok".
+
+6. Start up MultiBUGS under MPI
+
+    ```
+    mpiexec -n 1 bbcb
+    ```
