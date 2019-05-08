@@ -1,16 +1,6 @@
 jobs:
-- job: MultiBUGS_Windows
-  strategy:
-    matrix:
-      1workers_2chains:
-        CHAINS: '2'
-        WORKERS: '1'
-      2workers_2chains:
-        CHAINS: '2'
-        WORKERS: '2'
-      3workers_2chains:
-        CHAINS: '2'
-        WORKERS: '3'
+- job: Windows_Build
+  displayName: Windows Build
   timeoutInMinutes: 0
   pool:
     vmImage: 'windows-2019'
@@ -26,16 +16,51 @@ jobs:
       curl -fsS -o c:\blackbox-1.7.1.zip https://www.multibugs.org/build/blackbox-1.7.1.zip
       7z x c:\blackbox-1.7.1.zip -y -oc:\blackbox
       curl -fsS -o c:\blackbox\bbscript.exe https://www.multibugs.org/build/bbscript.exe
+    displayName: Install BlackBox
+  - script: |
+      echo on
       c:\blackbox\bbscript.exe /USE %BUILD_SOURCESDIRECTORY% /PAR Developer/Make.odc
       c:\blackbox\bbscript.exe /USE %BUILD_SOURCESDIRECTORY% /PAR Developer/LinkingWindows.odc
       mkdir c:\MultiBUGS\Dynamic\Sym
       mkdir c:\MultiBUGS\Dynamic\Code
-    displayName: Install BlackBox, Make and Link MultiBUGS
+    displayName: Build MultiBUGS
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'MultiBUGS-Windows'
+      targetPath: c:\MultiBUGS
+- job: Windows_Tests
+  displayName: Windows Tests
+  dependsOn: Windows_Build
+  strategy:
+    matrix:
+      1workers_2chains:
+        CHAINS: '2'
+        WORKERS: '1'
+      2workers_2chains:
+        CHAINS: '2'
+        WORKERS: '2'
+      3workers_2chains:
+        CHAINS: '2'
+        WORKERS: '3'
+  timeoutInMinutes: 0
+  pool:
+    vmImage: 'windows-2019'
+  steps:
+  - task: DownloadPipelineArtifact@0
+    inputs:
+      artifactName: 'MultiBUGS-Windows'
+      targetPath: c:\MultiBUGS
+  - script: |
+      echo on
+      curl -fsS -o c:\MSMpiSetup.exe https://download.microsoft.com/download/A/E/0/AE002626-9D9D-448D-8197-1EA510E297CE/msmpisetup.exe
+      c:\MSMpiSetup.exe -unattend
+      set PATH=C:\Program Files\Microsoft MPI\Bin;%PATH%
+    displayName: Update MS-MPI to version 10
   - script: |
       echo on
       choco install r.project --version 3.5.1 --no-progress
       set PATH=C:\Program Files\Microsoft MPI\Bin;C:\Program Files\R\R-3.5.1\bin\x64;%PATH%
-      Rscript.exe -e "install.packages(\"devtools\", repos=\"https://cloud.r-project.org\")" -e "install.packages(\"xml2\", repos=\"https://cloud.r-project.org\")" -e "devtools::install_github(\"MultiBUGS/R2MultiBUGS\")" -e "devtools::install_github(\"MultiBUGS/multibugstests\")"
+      Rscript.exe -e "install.packages(c(\"devtools\", \"xml2\"), repos=\"https://cloud.r-project.org\", type = \"binary\", Ncpus = 4)" -e "devtools::install_github(c(\"MultiBUGS/R2MultiBUGS\", \"MultiBUGS/multibugstests\"), threads = 4)"
     displayName: Install R and required packages
   - script: |
       echo on
@@ -56,19 +81,9 @@ jobs:
       mergeTestResults: true
       testRunTitle: '$(WORKERS) workers; $(CHAINS) chains'
     condition: always()
-    displayName: 'Publish Test Results'
-- job: MultiBUGS_Linux
-  strategy:
-    matrix:
-      1workers_2chains:
-        CHAINS: '2'
-        WORKERS: '1'
-      2workers_2chains:
-        CHAINS: '2'
-        WORKERS: '2'
-      3workers_2chains:
-        CHAINS: '2'
-        WORKERS: '3'
+    displayName: 'Publish test results'
+- job: Linux_Build
+  displayName: Linux Build
   timeoutInMinutes: 0
   pool:
     vmImage: 'ubuntu-16.04'
@@ -79,24 +94,19 @@ jobs:
     displayName: Uninstall unnecessary packages
   - script: |
       sudo dpkg --add-architecture i386
-      sudo add-apt-repository -y "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -sc)-cran35/"
-      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
       sudo apt-get -qq -y update
-      sudo apt-get install r-base libgtk2.0-0:i386 gtk2-engines:i386 gtk2-engines-murrine:i386 libcanberra-gtk-module:i386 gnome-icon-theme-full
-      sudo apt-get install r-base-dev
+      sudo apt-get install libgtk2.0-0:i386 gtk2-engines:i386 gtk2-engines-murrine:i386 libcanberra-gtk-module:i386 gnome-icon-theme-full
       # mpich installs libmpich12 which supplies libmpich.so.12
       sudo apt-get install mpich:i386
       # for building MultiBUGS.cpp
       sudo apt-get install g++-multilib
-      # By default, R_LIBS_USERS is not set, so need to allow package installation to site-library
-      sudo chmod o+w /usr/local/lib/R/site-library
-    displayName: Install R, 32-bit MPICH, and 32-bit GTK libraries
+    displayName: Install 32-bit MPICH, and 32-bit GTK libraries
   - script: |
       git clone https://github.com/bbcb/bbcp.git ${AGENT_HOMEDIRECTORY}/bbcb
       cd ${AGENT_HOMEDIRECTORY}/bbcb/BlackBox
       ./switch-target `uname -s` GUI
       ./build
-    displayName: Install BlackBox Cross-Platform
+    displayName: Install BlackBox
   - script: |
       cd ${BUILD_SOURCESDIRECTORY}
       g++ -m32 -o MultiBUGS MultiBUGS.cpp
@@ -209,6 +219,54 @@ jobs:
       chmod +x MultiBUGS-binary/MultiBUGS
       chmod +x MultiBUGS-binary/run-MultiBUGS
     displayName: Build MultiBUGS
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'MultiBUGS-Linux'
+      targetPath: $(Build.SourcesDirectory)/MultiBUGS-binary
+- job: Linux_Tests
+  displayName: Linux Tests
+  dependsOn: Linux_Build
+  strategy:
+    matrix:
+      1workers_2chains:
+        CHAINS: '2'
+        WORKERS: '1'
+      2workers_2chains:
+        CHAINS: '2'
+        WORKERS: '2'
+      3workers_2chains:
+        CHAINS: '2'
+        WORKERS: '3'
+  timeoutInMinutes: 0
+  pool:
+    vmImage: 'ubuntu-16.04'
+  steps:
+  - task: DownloadPipelineArtifact@0
+    inputs:
+      artifactName: 'MultiBUGS-Linux'
+      targetPath: $(Build.SourcesDirectory)/MultiBUGS-binary
+  - script: |
+      # Uninstalling these packages is NOT needed for MultiBUGS, but vastly speeds up apt-get update on Azure
+      chmod +x $(Build.SourcesDirectory)/MultiBUGS-binary/MultiBUGS
+      chmod +x $(Build.SourcesDirectory)/MultiBUGS-binary/OpenBUGS
+      chmod +x $(Build.SourcesDirectory)/MultiBUGS-binary/run-MultiBUGS
+    displayName: Set permissions for MultiBUGS
+  - script: |
+      # Uninstalling these packages is NOT needed for MultiBUGS, but vastly speeds up apt-get update on Azure
+      sudo apt-get -qq remove '^libmono.*' '^mono.*' '^php.*'
+    displayName: Uninstall unnecessary packages
+  - script: |
+      sudo dpkg --add-architecture i386
+      sudo add-apt-repository -y "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -sc)-cran35/"
+      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+      sudo apt-get -qq -y update
+      sudo apt-get install r-base libgtk2.0-0:i386 gtk2-engines:i386 gtk2-engines-murrine:i386 libcanberra-gtk-module:i386 gnome-icon-theme-full
+      sudo apt-get install r-base-dev
+      # mpich installs libmpich12 which supplies libmpich.so.12
+      sudo apt-get install mpich:i386
+      # By default, R_LIBS_USERS is not set, so need to allow package installation to site-library
+      sudo chmod o+w /usr/local/lib/R/site-library
+    displayName: Install R, 32-bit MPICH, and 32-bit GTK libraries
   - script: |
       # needed for devtools
       sudo apt-get update
@@ -217,7 +275,7 @@ jobs:
       sudo apt-get install libgit2-dev
       sudo apt-get install libssh2-1-dev
       Rscript -e "install.packages(c(\"devtools\", \"xml2\"), repos=\"https://cloud.r-project.org\", Ncpus = 4)" -e "devtools::install_github(c(\"MultiBUGS/R2MultiBUGS\", \"MultiBUGS/multibugstests\"), threads = 4)"
-    displayName: Install R packages
+    displayName: Install required R packages
   - script: |
       Xvfb :99 -screen 0 1024x768x24 </dev/null &
       sleep 5
@@ -251,4 +309,4 @@ jobs:
       mergeTestResults: true
       testRunTitle: '$(WORKERS) workers; $(CHAINS) chains'
     condition: always()
-    displayName: 'Publish Test Results'
+    displayName: 'Publish test results'
