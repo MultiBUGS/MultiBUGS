@@ -28,6 +28,8 @@ The current released version of MultiBUGS works only on Windows and requires [Mi
 
 ### Windows pre-built unstable binaries
 
+We recommend using the stable version from the main [MultiBUGS website](https://www.multibugs.org), but if you want to try out the current unstable version:
+
 1. Download and install [Microsoft MPI (MS-MPI)](https://docs.microsoft.com/en-us/message-passing-interface/microsoft-mpi#ms-mpi-downloads) (v8.1 or newer)
 
 2. Download the [latest `master` branch build of MultiBUGS](https://ci.appveyor.com/api/projects/MultiBUGS/MultiBUGS/artifacts/MultiBUGS.zip?branch=master). Unzip this to, e.g., `C:\Program Files (x86)\MultiBUGS`.
@@ -39,6 +41,8 @@ Pre-built Linux binaries in preparation
 ## Compiling from source
 
 ### Compiling from source on Windows
+
+We recommend using the stable version from the main [MultiBUGS website](https://www.multibugs.org), but if you want to compile the current unstable version from source:
 
 1. Download and install [Microsoft MPI (MS-MPI)](https://docs.microsoft.com/en-us/message-passing-interface/microsoft-mpi#ms-mpi-downloads). Version 8.1 or newer is required, since MultiBUGS uses `MPI_Comm_spawn`. This framework allows running parallel applications on the Windows platform.
 
