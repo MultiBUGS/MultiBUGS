@@ -46,13 +46,13 @@ Pre-built Linux binaries in preparation
 
 3. Download the [zip archive](https://github.com/MultiBUGS/MultiBUGS/archive/master.zip) of MultiBUGS. Unzip this to, for example, `C:\`
 
-4. Make a new shortcut to the BlackBox.exe file in the newly-installed BlackBox directory (right-click on BlackBox.exe, choose "Create shortcut"). Add the path to the MultiBUGS directory as the `/USE` argument to the `Target` of the shortcut. For example, if BlackBox  is in `C:\Program Files (x86)\BlackBox Component Builder 1.7\` and MultiBUGS is in `C:\MultiBUGS-master`, then change the `Target` to:
+4. Make a new shortcut to the BlackBox.exe file in the newly-installed BlackBox directory (right-click on BlackBox.exe, choose "Create shortcut"). Then, right click the newly-created shortcut, choose "Properties", and choose the "Shortcut" tab. Then add the following text to the `Target` box, with the paths `C:\Program Files (x86)\BlackBox Component Builder 1.7\BlackBox.exe` (path to BlackBox.exe) and `C:\MultiBUGS-master` (path to the MultiBUGS directory) changed to match wherever you installed BlackBox and MultiBUGS:
 
     ```
     mpiexec -n 1 "C:\Program Files (x86)\BlackBox Component Builder 1.7\BlackBox.exe" /USE "C:\MultiBUGS-master"
     ```
 
-    and `Start in` to
+    Then change the `Start in` to match the path to the MultiBUGS directory, e.g.
 
     ```
     "C:\MultiBUGS-master"
