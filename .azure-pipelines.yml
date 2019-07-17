@@ -248,7 +248,6 @@ jobs:
       artifactName: 'MultiBUGS-Linux'
       targetPath: $(Build.SourcesDirectory)/MultiBUGS-binary
   - script: |
-      # Uninstalling these packages is NOT needed for MultiBUGS, but vastly speeds up apt-get update on Azure
       chmod +x $(Build.SourcesDirectory)/MultiBUGS-binary/MultiBUGS
       chmod +x $(Build.SourcesDirectory)/MultiBUGS-binary/OpenBUGS
       chmod +x $(Build.SourcesDirectory)/MultiBUGS-binary/run-MultiBUGS
