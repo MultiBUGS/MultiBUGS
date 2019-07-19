@@ -299,7 +299,12 @@ jobs:
       #fi
       mkdir -p ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run
       Rscript -e "multibugstests:::bugs_example(\"Rats\", dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 2, n.chains = 2, working_dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run/\")"
+      ls ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/
+      echo "RRRRUN"
       ls ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run
+      echo "SSSSscript"
+      cat ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run/script.txt
+      echo "LLLLOg"
       cat ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run/log.txt
       DISPLAY=:99 import -window root screenshot-${WORKERS}workers-${CHAINS}chains.png
     displayName: Run tests
