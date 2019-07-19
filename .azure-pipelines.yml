@@ -297,6 +297,7 @@ jobs:
       #  Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/Reliability/Examples/\")"
       #  Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/GeoBUGS/Examples/\")"
       #fi
+      mkdir run
       Rscript -e "multibugstests:::bugs_example(\"Rats\", dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 2, n.chains = 2, working_dir = \"run\")"
       ls run
       cat run/log.txt
