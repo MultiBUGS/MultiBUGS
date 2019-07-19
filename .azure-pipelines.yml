@@ -298,7 +298,7 @@ jobs:
       #  Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/GeoBUGS/Examples/\")"
       #fi
       mkdir -p ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run
-      Rscript -e "multibugstests:::bugs_example(\"Rats\", dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 2, n.chains = 2, working_dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run/\")"
+      Rscript -e "multibugstests:::bugs_example(\"Rats\", dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 1, n.chains = 1, working_dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run/\")"
       ls ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/
       echo "RRRRUN"
       ls ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run
