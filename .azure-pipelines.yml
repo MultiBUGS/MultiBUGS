@@ -302,7 +302,7 @@ jobs:
       ls ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/
       echo "RRRRUN"
       ls ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run
-      echo "SSSSscript"
+      echo "SSSscript"
       cat ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run/script.txt
       echo "LLLLOg"
       cat ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run/log.txt
