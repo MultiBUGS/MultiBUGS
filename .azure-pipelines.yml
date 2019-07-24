@@ -1,6 +1,3 @@
-container: 
-  image: 'rocker/r-base:latest'
-
 jobs:
 - job: Windows_Build
   displayName: Windows Build
@@ -99,10 +96,12 @@ jobs:
   timeoutInMinutes: 0
   pool:
     vmImage: 'ubuntu-16.04'
+  container: 
+    image: 'rocker/r-base:latest'
   steps:
   - script: |
       # Uninstalling these packages is NOT needed for MultiBUGS, but vastly speeds up apt-get update on Azure
-      sudo apt-get -qq remove '^libmono.*' '^mono.*' '^php.*'
+      #sudo apt-get -qq remove '^libmono.*' '^mono.*' '^php.*'
     displayName: Uninstall unnecessary packages
   - script: |
       sudo dpkg --add-architecture i386
@@ -254,6 +253,8 @@ jobs:
   timeoutInMinutes: 0
   pool:
     vmImage: 'ubuntu-16.04'
+  container: 
+    image: 'rocker/r-base:latest'
   steps:
   - task: DownloadPipelineArtifact@0
     inputs:
@@ -266,15 +267,15 @@ jobs:
     displayName: Set permissions for MultiBUGS
   - script: |
       # Uninstalling these packages is NOT needed for MultiBUGS, but vastly speeds up apt-get update on Azure
-      sudo apt-get -qq remove '^libmono.*' '^mono.*' '^php.*'
+      #sudo apt-get -qq remove '^libmono.*' '^mono.*' '^php.*'
     displayName: Uninstall unnecessary packages
   - script: |
       sudo dpkg --add-architecture i386
-      sudo add-apt-repository -y "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -sc)-cran35/"
-      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+      #sudo add-apt-repository -y "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -sc)-cran35/"
+      #sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
       sudo apt-get -qq -y update
-      sudo apt-get install r-base libgtk2.0-0:i386 gtk2-engines:i386 gtk2-engines-murrine:i386 libcanberra-gtk-module:i386 gnome-icon-theme-full
-      sudo apt-get install r-base-dev
+      sudo apt-get install libgtk2.0-0:i386 gtk2-engines:i386 gtk2-engines-murrine:i386 libcanberra-gtk-module:i386 gnome-icon-theme-full
+      #sudo apt-get install r-base-dev
       # mpich installs libmpich12 which supplies libmpich.so.12
       sudo apt-get install mpich:i386
       # By default, R_LIBS_USERS is not set, so need to allow package installation to site-library
@@ -282,11 +283,11 @@ jobs:
     displayName: Install R, 32-bit MPICH, and 32-bit GTK libraries
   - script: |
       # needed for devtools
-      sudo apt-get update
-      sudo apt-get install libcurl4-openssl-dev
-      sudo apt-get install libssl-dev
-      sudo apt-get install libgit2-dev
-      sudo apt-get install libssh2-1-dev
+      # sudo apt-get update
+      # sudo apt-get install libcurl4-openssl-dev
+      # sudo apt-get install libssl-dev
+      # sudo apt-get install libgit2-dev
+      # sudo apt-get install libssh2-1-dev
       Rscript -e "install.packages(c(\"devtools\", \"xml2\"), repos=\"https://cloud.r-project.org\", Ncpus = 4)" -e "devtools::install_github(c(\"MultiBUGS/R2MultiBUGS\", \"MultiBUGS/multibugstests\"), threads = 4)"
     displayName: Install required R packages
   - script: |
