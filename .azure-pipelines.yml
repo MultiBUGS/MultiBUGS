@@ -110,18 +110,18 @@ jobs:
       #mpiexec --version
       # for building MultiBUGS.cpp
       sudo apt-get install g++-multilib
-      sudo apt-get install -y software-properties-common curl
-      sudo apt-get install gfortran
-      MPICH_VERSION=3.2.1
-      cd /tmp
-      curl --retry 3 http://www.mpich.org/static/downloads/${MPICH_VERSION}/mpich-${MPICH_VERSION}.tar.gz | tar xz
-      cd mpich-${MPICH_VERSION}
-      ./configure --enable-fast=all,O3 CC=gcc MPICHLIB_CFLAGS=-m32 --prefix=/usr --with-device=ch3:sock --disable-fortran --disable-cxx
-      make -j 4
-      sudo make install
-      which mpicc
-      which mpiexec
-      mpiexec --version
+      # sudo apt-get install -y software-properties-common curl
+      # sudo apt-get install gfortran
+      # MPICH_VERSION=3.2.1
+      # cd /tmp
+      # curl --retry 3 http://www.mpich.org/static/downloads/${MPICH_VERSION}/mpich-${MPICH_VERSION}.tar.gz | tar xz
+      # cd mpich-${MPICH_VERSION}
+      # ./configure --enable-fast=all,O3 CC=gcc MPICHLIB_CFLAGS=-m32 --prefix=/usr --with-device=ch3:sock --disable-fortran --disable-cxx
+      # make -j 4
+      # sudo make install
+      # which mpicc
+      # which mpiexec
+      # mpiexec --version
     displayName: Install 32-bit MPICH, and 32-bit GTK libraries
   - script: |
       git clone https://github.com/bbcb/bbcp.git ${AGENT_HOMEDIRECTORY}/bbcb
@@ -286,7 +286,21 @@ jobs:
       sudo apt-get install r-base libgtk2.0-0:i386 gtk2-engines:i386 gtk2-engines-murrine:i386 libcanberra-gtk-module:i386 gnome-icon-theme-full
       sudo apt-get install r-base-dev
       # mpich installs libmpich12 which supplies libmpich.so.12
-      sudo apt-get install mpich:i386
+      # sudo apt-get install mpich:i386
+      sudo apt-get install g++-multilib
+      sudo apt-get install -y software-properties-common curl
+      sudo apt-get install gfortran
+      MPICH_VERSION=3.2.1
+      cd /tmp
+      curl --retry 3 http://www.mpich.org/static/downloads/${MPICH_VERSION}/mpich-${MPICH_VERSION}.tar.gz | tar xz
+      cd mpich-${MPICH_VERSION}
+      ./configure --enable-fast=all,O3 CC=gcc MPICHLIB_CFLAGS=-m32 --prefix=/usr --with-device=ch3:sock --disable-fortran --disable-cxx
+      make -j 4
+      sudo make install
+      which mpicc
+      which mpiexec
+      mpiexec --version
+
       # By default, R_LIBS_USERS is not set, so need to allow package installation to site-library
       sudo chmod o+w /usr/local/lib/R/site-library
     displayName: Install R, 32-bit MPICH, and 32-bit GTK libraries
