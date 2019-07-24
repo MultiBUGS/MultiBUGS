@@ -75,14 +75,14 @@ jobs:
       rem IF "%WORKERS%"=="2" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 2, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\")"
       rem IF "%WORKERS%"=="1" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 1, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\")"
       mkdir ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run
-      Rscript.exe -e "multibugstests:::bugs_example(\"Methadone\", dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = 2, working_dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run/\")"
-      ls ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/
+      Rscript.exe -e "multibugstests:::bugs_example(\"Rats\", dir = \"%BUILD_SOURCESDIRECTORY%/MultiBUGS-binary/\", n.workers = $WORKERS%, n.chains = 2, working_dir = \"%BUILD_SOURCESDIRECTORY%/MultiBUGS-binary/run/\")"
+      ls %BUILD_SOURCESDIRECTORY%/MultiBUGS-binary/
       echo "RRRRUN"
-      ls ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run
+      ls %BUILD_SOURCESDIRECTORY%/MultiBUGS-binary/run
       echo "SSSscript"
-      type ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run/script.txt
+      type %BUILD_SOURCESDIRECTORY%/MultiBUGS-binary/run/script.txt
       echo "LLLLOg"
-      type ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run/log.txt
+      type %BUILD_SOURCESDIRECTORY%/MultiBUGS-binary/run/log.txt
     displayName: Run tests
   - task: PublishTestResults@2
     inputs:
@@ -307,7 +307,7 @@ jobs:
       #  Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/GeoBUGS/Examples/\")"
       #fi
       mkdir -p ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run
-      Rscript -e "multibugstests:::bugs_example(\"Methadone\", dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = 2, working_dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run/\")"
+      Rscript -e "multibugstests:::bugs_example(\"Rats\", dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = 2, working_dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run/\")"
       ls ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/
       echo "RRRRUN"
       ls ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/run
