@@ -1,3 +1,6 @@
+container: 
+	  image: 'rocker/r-base:latest'
+
 jobs:
 - job: Windows_Build
   displayName: Windows Build
