@@ -164,19 +164,19 @@ jobs:
       cp -r ${BBINSTALLDIR}/Gtk2/Code/*.ocf MultiBUGS-binary/Gtk2/Code
       cp -r ${BBINSTALLDIR}/Code/*.ocf MultiBUGS-binary/Code
       cp -r ${BBINSTALLDIR}/Cons/Code/*.ocf MultiBUGS-binary/Cons/Code
-      cp -r Form/Code/*.ocf MultiBUGS-binary/Form/Code
+      #cp -r Form/Code/*.ocf MultiBUGS-binary/Form/Code
       cp -r Host/Code/*.ocf MultiBUGS-binary/Host/Code
       #cp -r Lin/Code/*.ocf MultiBUGS-binary/Lin/Code
       #cp -r Ole/Code/*.ocf MultiBUGS-binary/Ole/Code
       cp -r Std/Code/*.ocf MultiBUGS-binary/Std/Code
       #cp -r System/Code/*.ocf MultiBUGS-binary/System/Code
-      cp -r Text/Code/*.ocf MultiBUGS-binary/Text/Code
+      #cp -r Text/Code/*.ocf MultiBUGS-binary/Text/Code
       #cp -r Win/Code/*.ocf MultiBUGS-binary/Win/Code
-      cp -r Xhtml/Code/*.ocf MultiBUGS-binary/Xhtml/Code
-      cp -r Dev2/Code/*.ocf MultiBUGS-binary/Dev2/Code
-      cp -r Gtk2/Code/*.ocf MultiBUGS-binary/Gtk2/Code
+      #cp -r Xhtml/Code/*.ocf MultiBUGS-binary/Xhtml/Code
+      #cp -r Dev2/Code/*.ocf MultiBUGS-binary/Dev2/Code
+      #cp -r Gtk2/Code/*.ocf MultiBUGS-binary/Gtk2/Code
       cp -r Code/*.ocf MultiBUGS-binary/Code
-      cp -r Cons/*.ocf MultiBUGS-binary/Cons
+      #cp -r Cons/*.ocf MultiBUGS-binary/Cons
       cp -r Bugs/Code/*.ocf MultiBUGS-binary/Bugs/Code
       cp -r Compare/Code/*.ocf MultiBUGS-binary/Compare/Code
       cp -r Correl/Code/*.ocf MultiBUGS-binary/Correl/Code
@@ -213,8 +213,10 @@ jobs:
       cp Graph/Sym/Stochastic.osf MultiBUGS-binary/Graph/Sym/Stochastic.osf
       #cp System/Sym/Math.osf MultiBUGS-binary/System/Sym/Math.osf
       #cp System/Sym/Stores.osf MultiBUGS-binary/System/Sym/Stores.osf
-      cp Sym/Math.osf MultiBUGS-binary/Sym/Math.osf
-      cp Sym/Stores.osf MultiBUGS-binary/Sym/Stores.osf
+      #cp System/Sym/Stores64.osf MultiBUGS-binary/System/Sym/Stores64.osf
+      cp ${BBINSTALLDIR}/Sym/Math.osf MultiBUGS-binary/Sym/Math.osf
+      cp ${BBINSTALLDIR}/Sym/Stores.osf MultiBUGS-binary/Sym/Stores.osf
+      cp ${BBINSTALLDIR}/Sym/Stores64.osf MultiBUGS-binary/Sym/Stores64.osf
       chmod +x MultiBUGS-binary/OpenBUGS
       chmod +x MultiBUGS-binary/MultiBUGS
       chmod +x MultiBUGS-binary/run-MultiBUGS
