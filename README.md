@@ -99,11 +99,9 @@ On Debian/Ubuntu-based systems
     bbcb
     ```
 
-4. Open `MPIliblinux.odc` within `Mod` within `System`. Edit the name of the shared object to match that on your install of libmpich. (This will be automated in the future.)
+4. Within MultiBUGS/BlackBox open `MakeLinux.odc`, which is found in the `Developer` directory in the MultiBUGS directory. Click on the `!` beside `DevCompiler.CompileThis`. This will compile MultiBUGS. Once compiling is finished the status bar should say "ok".
 
-5. Within MultiBUGS/BlackBox open `MakeLinux.odc`, which is found in the `Developer` directory in the MultiBUGS directory. Click on the `!` beside `DevCompiler.CompileThis`. This will compile MultiBUGS. Once compiling is finished the status bar should say "ok".
-
-6. Start up MultiBUGS under MPI
+5. Start up MultiBUGS under MPI
 
     ```
     mpiexec -n 1 bbcb
