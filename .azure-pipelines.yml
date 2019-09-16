@@ -33,15 +33,15 @@ jobs:
   dependsOn: Windows_Build
   strategy:
     matrix:
-      1workers_2chains:
+      1chain_1worker:
+        CHAINS: '1'
+        WORKERS: '1'
+      2chains_1worker:
         CHAINS: '2'
         WORKERS: '1'
-      2workers_2chains:
-        CHAINS: '2'
+      1chain_2workers:
+        CHAINS: '1'
         WORKERS: '2'
-      3workers_2chains:
-        CHAINS: '2'
-        WORKERS: '3'
   timeoutInMinutes: 0
   pool:
     vmImage: 'windows-2019'
@@ -65,15 +65,9 @@ jobs:
   - script: |
       echo on
       set PATH=C:\Program Files\Microsoft MPI\Bin;C:\Program Files\R\R-3.5.1\bin\x64;%PATH%
-      IF "%WORKERS%"=="3" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 3, n.chains = 2, report = \"junit\")"
-      IF "%WORKERS%"=="2" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 2, n.chains = 2, report = \"junit\")"
-      IF "%WORKERS%"=="1" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 1, n.chains = 2, report = \"junit\")"
-      IF "%WORKERS%"=="3" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
-      IF "%WORKERS%"=="2" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 2, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
-      IF "%WORKERS%"=="1" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 1, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
-      IF "%WORKERS%"=="3" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\")"
-      IF "%WORKERS%"=="2" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 2, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\")"
-      IF "%WORKERS%"=="1" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = 1, n.chains = 2, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\")"
+      Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\")"
+      Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
+      Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\")"
     displayName: Run tests
   - task: PublishTestResults@2
     inputs:
@@ -164,19 +158,19 @@ jobs:
       cp -r ${BBINSTALLDIR}/Gtk2/Code/*.ocf MultiBUGS-binary/Gtk2/Code
       cp -r ${BBINSTALLDIR}/Code/*.ocf MultiBUGS-binary/Code
       cp -r ${BBINSTALLDIR}/Cons/Code/*.ocf MultiBUGS-binary/Cons/Code
-      cp -r Form/Code/*.ocf MultiBUGS-binary/Form/Code
+      #cp -r Form/Code/*.ocf MultiBUGS-binary/Form/Code
       cp -r Host/Code/*.ocf MultiBUGS-binary/Host/Code
       #cp -r Lin/Code/*.ocf MultiBUGS-binary/Lin/Code
       #cp -r Ole/Code/*.ocf MultiBUGS-binary/Ole/Code
       cp -r Std/Code/*.ocf MultiBUGS-binary/Std/Code
       #cp -r System/Code/*.ocf MultiBUGS-binary/System/Code
-      cp -r Text/Code/*.ocf MultiBUGS-binary/Text/Code
+      #cp -r Text/Code/*.ocf MultiBUGS-binary/Text/Code
       #cp -r Win/Code/*.ocf MultiBUGS-binary/Win/Code
-      cp -r Xhtml/Code/*.ocf MultiBUGS-binary/Xhtml/Code
-      cp -r Dev2/Code/*.ocf MultiBUGS-binary/Dev2/Code
-      cp -r Gtk2/Code/*.ocf MultiBUGS-binary/Gtk2/Code
+      #cp -r Xhtml/Code/*.ocf MultiBUGS-binary/Xhtml/Code
+      #cp -r Dev2/Code/*.ocf MultiBUGS-binary/Dev2/Code
+      #cp -r Gtk2/Code/*.ocf MultiBUGS-binary/Gtk2/Code
       cp -r Code/*.ocf MultiBUGS-binary/Code
-      cp -r Cons/*.ocf MultiBUGS-binary/Cons
+      #cp -r Cons/*.ocf MultiBUGS-binary/Cons
       cp -r Bugs/Code/*.ocf MultiBUGS-binary/Bugs/Code
       cp -r Compare/Code/*.ocf MultiBUGS-binary/Compare/Code
       cp -r Correl/Code/*.ocf MultiBUGS-binary/Correl/Code
@@ -213,8 +207,10 @@ jobs:
       cp Graph/Sym/Stochastic.osf MultiBUGS-binary/Graph/Sym/Stochastic.osf
       #cp System/Sym/Math.osf MultiBUGS-binary/System/Sym/Math.osf
       #cp System/Sym/Stores.osf MultiBUGS-binary/System/Sym/Stores.osf
-      cp Sym/Math.osf MultiBUGS-binary/Sym/Math.osf
-      cp Sym/Stores.osf MultiBUGS-binary/Sym/Stores.osf
+      #cp System/Sym/Stores64.osf MultiBUGS-binary/System/Sym/Stores64.osf
+      cp ${BBINSTALLDIR}/Sym/Math.osf MultiBUGS-binary/Sym/Math.osf
+      cp ${BBINSTALLDIR}/Sym/Stores.osf MultiBUGS-binary/Sym/Stores.osf
+      cp ${BBINSTALLDIR}/Sym/Stores64.osf MultiBUGS-binary/Sym/Stores64.osf
       chmod +x MultiBUGS-binary/OpenBUGS
       chmod +x MultiBUGS-binary/MultiBUGS
       chmod +x MultiBUGS-binary/run-MultiBUGS
@@ -228,15 +224,18 @@ jobs:
   dependsOn: Linux_Build
   strategy:
     matrix:
-      1workers_2chains:
+      1chain_1worker:
+        CHAINS: '1'
+        WORKERS: '1'
+        MPI: 'apt'
+      2chains_1worker:
         CHAINS: '2'
         WORKERS: '1'
-      2workers_2chains:
-        CHAINS: '2'
+        MPI: 'source'
+      1chain_2workers:
+        CHAINS: '1'
         WORKERS: '2'
-      3workers_2chains:
-        CHAINS: '2'
-        WORKERS: '3'
+        MPI: 'source'
   timeoutInMinutes: 0
   pool:
     vmImage: 'ubuntu-16.04'
@@ -262,10 +261,24 @@ jobs:
       sudo apt-get -qq -y update
       sudo apt-get install r-base libgtk2.0-0:i386 gtk2-engines:i386 gtk2-engines-murrine:i386 libcanberra-gtk-module:i386 gnome-icon-theme-full
       sudo apt-get install r-base-dev
-      # mpich installs libmpich12 which supplies libmpich.so.12
-      sudo apt-get install mpich:i386
+      sudo apt-get install g++-multilib
       # By default, R_LIBS_USERS is not set, so need to allow package installation to site-library
       sudo chmod o+w /usr/local/lib/R/site-library
+      if [ "$MPI" == "apt" ]; then
+        # mpich installs libmpich12 which supplies libmpich.so.12
+        sudo apt-get install mpich:i386
+      fi
+      if [ "$MPI" == "source" ]; then
+        sudo apt-get install -y software-properties-common curl
+        MPICH_VERSION=3.2.1
+        cd /tmp
+        curl --retry 3 http://www.mpich.org/static/downloads/${MPICH_VERSION}/mpich-${MPICH_VERSION}.tar.gz | tar xz
+        cd mpich-${MPICH_VERSION}
+        ./configure --enable-fast=all,O3 CC=gcc MPICHLIB_CFLAGS=-m32 --prefix=/usr --with-device=ch3:sock --disable-fortran --disable-cxx
+        make -j 4
+        sudo make install
+        mpiexec --version
+      fi
     displayName: Install R, 32-bit MPICH, and 32-bit GTK libraries
   - script: |
       # needed for devtools
@@ -281,21 +294,9 @@ jobs:
       sleep 5
       export DISPLAY=":99"
       cd ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary
-      if [ "$WORKERS" == "1" ]; then
-        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 1, n.chains = 2, report = \"junit\")"
-        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 1, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/Reliability/Examples/\")"
-        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 1, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/GeoBUGS/Examples/\")"
-      fi
-      if [ "$WORKERS" == "2" ]; then
-        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 2, n.chains = 2, report = \"junit\")"
-        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 2, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/Reliability/Examples/\")"
-        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 2, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/GeoBUGS/Examples/\")"
-      fi
-      if [ "$WORKERS" == "3" ]; then
-        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 3, n.chains = 2, report = \"junit\")"
-        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/Reliability/Examples/\")"
-        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = 3, n.chains = 2, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/GeoBUGS/Examples/\")"
-      fi
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\")"
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/Reliability/Examples/\")"
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/GeoBUGS/Examples/\")"
       DISPLAY=:99 import -window root screenshot-${WORKERS}workers-${CHAINS}chains.png
     displayName: Run tests
   - task: PublishPipelineArtifact@0
