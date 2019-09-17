@@ -65,9 +65,9 @@ jobs:
   - script: |
       echo on
       set PATH=C:\Program Files\Microsoft MPI\Bin;C:\Program Files\R\R-3.5.1\bin\x64;%PATH%
-      Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\")"
+      Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", exclude = c(\"ChangePoints\", \"Ice\", \"Lsat\", \"Pines\", \"StVeit\", \"Sixcomp\", \"Leukfr\"))"
       Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
-      Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\")"
+      Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\", exclude = c(\"Scotland1\", \"Elevation\", \"Shared\", \"MVCAR\"))"
     displayName: Run tests
   - task: PublishTestResults@2
     inputs:
@@ -294,9 +294,15 @@ jobs:
       sleep 5
       export DISPLAY=":99"
       cd ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary
-        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\")"
-        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/Reliability/Examples/\")"
-        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/GeoBUGS/Examples/\")"
+      #Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", include = c(\"Rats\"))"
+      Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", exclude = c(\"ChangePoints\", \"Ice\", \"Lsat\", \"Pines\", \"StVeit\", \"Sixcomp\", \"Leukfr\"))"
+      Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/Reliability/Examples/\", exclude = c(\"InvGaussian\"))"
+      Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/GeoBUGS/Examples/\", exclude = c(\"Scotland1\", \"Elevation\", \"Shared\", \"MVCAR\"))"
+    #timeoutInMinutes: 5
+    continueOnError: true
+    displayName: Run tests
+  - script: |
+      cd ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary
       DISPLAY=:99 import -window root screenshot-${WORKERS}workers-${CHAINS}chains.png
     displayName: Run tests
   - task: PublishPipelineArtifact@0
