@@ -290,6 +290,9 @@ jobs:
       Rscript -e "install.packages(c(\"devtools\", \"xml2\"), repos=\"https://cloud.r-project.org\")" -e "devtools::install_github(c(\"MultiBUGS/R2MultiBUGS\", \"MultiBUGS/multibugstests\"))"
     displayName: Install required R packages
   - script: |
+      mkdir -p /tmp/.X11-unix
+      sudo chmod 1777 /tmp/.X11-unix
+      sudo chown root /tmp/.X11-unix/
       Xvfb :99 -screen 0 1024x768x24 </dev/null &
       sleep 5
       export DISPLAY=":99"
@@ -304,11 +307,13 @@ jobs:
   - script: |
       cd ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary
       DISPLAY=:99 import -window root screenshot-${WORKERS}workers-${CHAINS}chains.png
-    displayName: Run tests
+    condition: always()
+    displayName: Take screenshot of final result
   - task: PublishPipelineArtifact@0
     inputs:
       artifactName: 'Screenshot with $(WORKERS) workers and $(CHAINS) chains'
       targetPath: '$(Build.SourcesDirectory)/MultiBUGS-binary/screenshot-$(WORKERS)workers-$(CHAINS)chains.png'
+    condition: always()
     displayName: Publish screenshot of final result
   - task: PublishTestResults@2
     inputs:
