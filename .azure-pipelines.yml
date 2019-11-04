@@ -198,6 +198,7 @@ jobs:
       cp -r Updater/Code/*.ocf MultiBUGS-binary/Updater/Code
       mkdir -p MultiBUGS-binary/Math/Sym
       mkdir -p MultiBUGS-binary/Graph/Sym
+      mkdir -p MultiBUGS-binary/Dynamic/Sym
       mkdir -p MultiBUGS-binary/Sym
       cp Math/Sym/Func.osf MultiBUGS-binary/Math/Sym/Func.osf
       cp Graph/Sym/Logical.osf MultiBUGS-binary/Graph/Sym/Logical.osf
