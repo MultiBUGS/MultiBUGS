@@ -323,3 +323,10 @@ jobs:
       testRunTitle: '$(WORKERS) workers; $(CHAINS) chains'
     condition: always()
     displayName: 'Publish test results'
+schedules:
+- cron: "0 0 * * *"
+  displayName: Daily UTC midnight build
+  branches:
+    include:
+    - master
+  always: true
