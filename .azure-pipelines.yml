@@ -7,10 +7,10 @@ jobs:
   steps:
   - script: |
       echo on
-      curl -fsS -o c:\MSMpiSetup.exe https://download.microsoft.com/download/A/E/0/AE002626-9D9D-448D-8197-1EA510E297CE/msmpisetup.exe
+      curl -fsS -o c:\MSMpiSetup.exe https://download.microsoft.com/download/a/5/2/a5207ca5-1203-491a-8fb8-906fd68ae623/msmpisetup.exe
       c:\MSMpiSetup.exe -unattend
       set PATH=C:\Program Files\Microsoft MPI\Bin;%PATH%
-    displayName: Update MS-MPI to version 10
+    displayName: Update MS-MPI to version 10.1.2
   - script: |
       echo on
       curl -fsS -o c:\blackbox-1.7.2.zip https://www.multibugs.org/build/blackbox-1.7.2.zip
@@ -52,10 +52,10 @@ jobs:
       targetPath: c:\MultiBUGS
   - script: |
       echo on
-      curl -fsS -o c:\MSMpiSetup.exe https://download.microsoft.com/download/A/E/0/AE002626-9D9D-448D-8197-1EA510E297CE/msmpisetup.exe
+      curl -fsS -o c:\MSMpiSetup.exe https://download.microsoft.com/download/a/5/2/a5207ca5-1203-491a-8fb8-906fd68ae623/msmpisetup.exe
       c:\MSMpiSetup.exe -unattend
       set PATH=C:\Program Files\Microsoft MPI\Bin;%PATH%
-    displayName: Update MS-MPI to version 10
+    displayName: Update MS-MPI to version 10.1.2
   - script: |
       echo on
       choco install r.project --version 3.5.1 --no-progress
