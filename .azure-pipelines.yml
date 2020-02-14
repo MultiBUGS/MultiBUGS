@@ -13,8 +13,8 @@ jobs:
     displayName: Update MS-MPI to version 10
   - script: |
       echo on
-      curl -fsS -o c:\blackbox-1.7.1.zip https://www.multibugs.org/build/blackbox-1.7.1.zip
-      7z x c:\blackbox-1.7.1.zip -y -oc:\blackbox
+      curl -fsS -o c:\blackbox-1.7.2.zip https://www.multibugs.org/build/blackbox-1.7.2.zip
+      7z x c:\blackbox-1.7.2.zip -y -oc:\blackbox
       curl -fsS -o c:\blackbox\bbscript.exe https://www.multibugs.org/build/bbscript.exe
     displayName: Install BlackBox
   - script: |
