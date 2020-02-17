@@ -108,3 +108,39 @@ On Debian/Ubuntu-based systems
     ```
     mpiexec -n 1 bbcb
     ```
+
+## License
+
+MultiBUGS is licensed under LGPL-3.0 (GNU Lesser General Public License v3.0)
+
+It includes code from:
+
+1. [BlackBox Framework Center](http://blackboxframework.org/)
+   2-Clause BSD License
+
+    ```
+    Copyright (c) 2013 - 2019 BlackBox Framework Center
+    Copyright (c) 1994 - 2013 Oberon microsystems, Inc., Switzerland.
+                              All rights reserved.
+    ```
+
+2. [BlackBox Cross-Platform](https://github.com/bbcb/bbcp)
+   2-Clause BSD License
+
+    ```
+    Copyright (c) 2017 - 2020 Alexander V. Shiryaev, Ivan A. Denisov,
+                              Igor A. Dehtyarenko, Anton A. Dmitriev
+    Copyright (c) 2013 - 2019 BlackBox Framework Center
+    Copyright (c) 1994 - 2013 Oberon microsystems, Inc., Switzerland.
+                              All rights reserved.
+    ```
+
+3. [TAUCS](http://www.cs.tau.ac.il/~stoledo/taucs/)
+   GNU LGPL (Library or Lesser GNU Public Library)
+
+    ```
+    TAUCS Version 2.0, November 29, 2001.
+    Copyright (c) 2001, 2002, 2003
+    by Sivan Toledo, Tel-Aviv Univesity, stoledo@tau.ac.il.
+    All Rights Reserved.
+    ````
