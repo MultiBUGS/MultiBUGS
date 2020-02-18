@@ -52,6 +52,6 @@ build_script:
     -e "devtools::install_github(\"MultiBUGS/multibugstests\")"
 test_script:
 - cmd: >-
-    Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 2, n.chains = 1, report = \"appveyor\", exclude = c(\"ChangePoints\", \"Ice\", \"Lsat\", \"Pines\", \"StVeit\", \"Sixcomp\", \"Leukfr\"))" &
+    Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 2, n.chains = 1, report = \"appveyor\", exclude = c(\"ChangePoints\", \"Ice\", \"Lsat\", \"Pines\", \"StVeit\", \"Sixcomp\", \"Leukfr\", \"Curves\", \"Hald\"))" &
 artifacts:
 - path: MultiBUGS.zip
