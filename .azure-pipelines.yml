@@ -67,7 +67,7 @@ jobs:
       set PATH=C:\Program Files\Microsoft MPI\Bin;C:\Program Files\R\R-3.5.1\bin\x64;%PATH%
       Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", exclude = c(\"Ice\", \"Lsat\", \"StVeit\", \"Sixcomp\", \"Curves\", \"Hald\", \"ChangePoints\"))"
       Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
-      Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\", exclude = c(\"MVCAR\", \"Shared\"))"
+      Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\", exclude = c(\"MVCAR\", \"Shared\", \"Pollution\"))"
     displayName: Run tests
   - task: PublishTestResults@2
     inputs:
@@ -301,7 +301,7 @@ jobs:
       #Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", include = c(\"Rats\"))"
       Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", exclude = c(\"Ice\", \"Lsat\", \"StVeit\", \"Sixcomp\", \"Curves\", \"Hald\", \"ChangePoints\"))"
       Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/Reliability/Examples/\", exclude = c(\"InvGaussian\", \"WeibullShifted\"))"
-      Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/GeoBUGS/Examples/\", exclude = c(\"MVCAR\", \"Shared\"))"
+      Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/GeoBUGS/Examples/\", exclude = c(\"MVCAR\", \"Shared\", \"Pollution\"))"
     #timeoutInMinutes: 5
     continueOnError: true
     displayName: Run tests
