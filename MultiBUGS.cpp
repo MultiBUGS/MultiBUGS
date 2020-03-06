@@ -65,7 +65,7 @@ int main(int argc, char *argv[]){
         strcmp("/LANG", argv[i]) == 0){
       multibugs_args = multibugs_args + " " + argv[i];
       if (i + 1 < argc){
-        multibugs_args = multibugs_args + " " + argv[i + 1];
+        multibugs_args = multibugs_args + " \"" + argv[i + 1] + "\"";
       }
       i = i + 2;
     } else if (// Now handle BlackBox/MultiBUGS flags
