@@ -254,17 +254,17 @@ jobs:
     inputs:
       key: 'r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(Date:yy)" | "$(Date:mm)" | "$(Date:dd)"'
       restoreKeys: |
-        'r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(Date:yy)" | "$(Date:mm)"'
-        'r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(Date:yy)"'
-        'r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)"'
+        r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(Date:yy)" | "$(Date:mm)"
+        r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(Date:yy)"
+        r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)"
     displayName: Cache R packages
   - task: Cache@2
     inputs:
       key: 'apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(Date:yy)" | "$(Date:mm)" | "$(Date:dd)"'
       restoreKeys: |
-        'apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(Date:yy)" | "$(Date:mm)"'
-        'apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(Date:yy)"'
-        'apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)"'
+        apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(Date:yy)" | "$(Date:mm)"
+        apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(Date:yy)"
+        apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)"
       path: /var/cache/apt/archives
     displayName: Cache APT packages
   - script: |
