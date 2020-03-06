@@ -41,8 +41,11 @@ build_script:
     c:\blackbox\bbscript.exe /USE %APPVEYOR_BUILD_FOLDER% /PAR Developer/LinkingWindows.odc
  
     call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
+
     rc -fo Win/Rsrc/Bugslogo.res Win/Rsrc/Bugslogo.rc
+
     cvtres -machine:ix86 -out:Bugslogo.obj Win/Rsrc/Bugslogo.res
+    
     cl /EHsc MultiBUGS.cpp /link shell32.lib Bugslogo.obj /subsystem:windows /entry:mainCRTStartup
 
     mkdir c:\MultiBUGS\Dynamic\Sym
