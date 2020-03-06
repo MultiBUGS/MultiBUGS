@@ -250,6 +250,23 @@ jobs:
     inputs:
       artifactName: 'MultiBUGS-Linux'
       targetPath: $(Build.SourcesDirectory)/MultiBUGS-binary
+  - task: Cache@2
+    inputs:
+      key: 'r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(Date:yy)" | "$(Date:mm)" | "$(Date:dd)"'
+      restoreKeys: |
+        'r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(Date:yy)" | "$(Date:mm)"'
+        'r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(Date:yy)"'
+        'r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)"'
+    displayName: Cache R packages
+  - task: Cache@2
+    inputs:
+      key: 'apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(Date:yy)" | "$(Date:mm)" | "$(Date:dd)"'
+      restoreKeys: |
+        'apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(Date:yy)" | "$(Date:mm)"'
+        'apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(Date:yy)"'
+        'apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)"'
+      path: /var/cache/apt/archives
+    displayName: Cache APT packages
   - script: |
       # Uninstalling these packages is NOT needed for MultiBUGS, but vastly speeds up apt-get update on Azure
       chmod +x $(Build.SourcesDirectory)/MultiBUGS-binary/MultiBUGS
