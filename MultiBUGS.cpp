@@ -92,6 +92,7 @@ int main(int argc, char *argv[]){
       ExePath() +
       "/OpenBUGS.exe\"" +
       multibugs_args;
+  std::cout << param;
 
     // call mpiexec
     SHELLEXECUTEINFO ShExecInfo = {0};
