@@ -39,8 +39,10 @@ build_script:
     rem Linking MultiBUGS modules
 
     c:\blackbox\bbscript.exe /USE %APPVEYOR_BUILD_FOLDER% /PAR Developer/LinkingWindows.odc
- 
-    call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
+
+    cd %APPVEYOR_BUILD_FOLDER%
+
+    call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\vcvars32.bat"
 
     rc -fo Win/Rsrc/Bugslogo.res Win/Rsrc/Bugslogo.rc
 
