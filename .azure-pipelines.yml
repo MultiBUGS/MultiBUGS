@@ -258,15 +258,15 @@ jobs:
         r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | $(Year:yyyy)
         r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)"
     displayName: Cache R packages
-  - task: Cache@2
-    inputs:
-      key: 'apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | $(Year:yyyy) | $(Month) | $(DayOfMonth)'
-      restoreKeys: |
-        apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | $(Year:yyyy) | $(Month)
-        apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | $(Year:yyyy)
-        apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)"
-      path: /var/cache/apt/archives
-    displayName: Cache APT packages
+#  - task: Cache@2
+#    inputs:
+#      key: 'apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | $(Year:yyyy) | $(Month) | $(DayOfMonth)'
+#      restoreKeys: |
+#        apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | $(Year:yyyy) | $(Month)
+#        apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | $(Year:yyyy)
+#        apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)"
+#      path: /var/cache/apt/archives
+#    displayName: Cache APT packages
   - script: |
       # Uninstalling these packages is NOT needed for MultiBUGS, but vastly speeds up apt-get update on Azure
       chmod +x $(Build.SourcesDirectory)/MultiBUGS-binary/MultiBUGS
