@@ -227,9 +227,9 @@ jobs:
       targetPath: $(Build.SourcesDirectory)/MultiBUGS-binary
 - job: Linux_Tests
   variables:
-  - JOB_START_YEAR: '$[ format('{0:yyyy}', pipeline.startTime) ]'
-  - JOB_START_MONTH: '$[ format('{0:MM}', pipeline.startTime) ]'
-  - JOB_START_DATE: '$[ format('{0:dd}', pipeline.startTime) ]'
+  - JOB_START_YEAR: "$[ format('{0:yyyy}', pipeline.startTime) ]"
+  - JOB_START_MONTH: "$[ format('{0:MM}', pipeline.startTime) ]"
+  - JOB_START_DATE: "$[ format('{0:dd}', pipeline.startTime) ]"
   displayName: Linux Tests
   dependsOn: Linux_Build
   strategy:
