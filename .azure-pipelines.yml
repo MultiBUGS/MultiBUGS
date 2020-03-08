@@ -1,7 +1,7 @@
 variables:
-- JOB_START_YEAR: ${{ format('{0:yyyy}', pipeline.startTime) }}
-- JOB_START_MONTH: ${{ format('{0:MM}', pipeline.startTime) }}
-- JOB_START_DAY: ${{ format('{0:dd}', pipeline.startTime) }}
+- JOB_START_YEAR: $[ format('{0:yyyy}', pipeline.startTime) ]
+- JOB_START_MONTH: $[ format('{0:MM}', pipeline.startTime) ]
+- JOB_START_DAY: $[ format('{0:dd}', pipeline.startTime) ]
 jobs:
 - job: Windows_Build
   displayName: Windows Build
