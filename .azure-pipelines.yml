@@ -1,3 +1,7 @@
+varaibles:
+- JOB_START_YEAR: ${{ format('{0:yyyy}', pipeline.startTime) }}
+- JOB_START_MONTH: ${{ format('{0:MM}', pipeline.startTime) }}
+- JOB_START_DAY: ${{ format('{0:dd}', pipeline.startTime) }}
 jobs:
 - job: Windows_Build
   displayName: Windows Build
@@ -252,18 +256,18 @@ jobs:
       targetPath: $(Build.SourcesDirectory)/MultiBUGS-binary
   - task: Cache@2
     inputs:
-      key: 'r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | $(Year:yyyy) | $(Month) | $(DayOfMonth)'
+      key: 'r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(JOB_START_YEAR)" | "$(JOB_START_MONTH)" | "$(JOB_START_DATE)"'
       restoreKeys: |
-        r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | $(Year:yyyy) | $(Month)
-        r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | $(Year:yyyy)
+        r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(JOB_START_YEAR)" | "$(JOB_START_MONTH)"
+        r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(JOB_START_YEAR)"
         r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)"
     displayName: Cache R packages
 #  - task: Cache@2
 #    inputs:
-#      key: 'apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | $(Year:yyyy) | $(Month) | $(DayOfMonth)'
+#      key: 'apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(JOB_START_YEAR)" | "$(JOB_START_MONTH)" | "$(JOB_START_DATE)"'
 #      restoreKeys: |
-#        apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | $(Year:yyyy) | $(Month)
-#        apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | $(Year:yyyy)
+#        apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(JOB_START_YEAR)" | "$(JOB_START_MONTH)")
+#        apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(JOB_START_YEAR)"
 #        apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)"
 #      path: /var/cache/apt/archives
 #    displayName: Cache APT packages
