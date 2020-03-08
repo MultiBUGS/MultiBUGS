@@ -229,7 +229,7 @@ jobs:
   variables:
   - JOB_START_YEAR: $[ format('{0:yyyy}', pipeline.startTime) ]
   - JOB_START_MONTH: $[ format('{0:MM}', pipeline.startTime) ]
-  - JOB_START_DAY: $[ format('{0:dd}', pipeline.startTime) ]
+  - JOB_START_DATE: $[ format('{0:dd}', pipeline.startTime) ]
   displayName: Linux Tests
   dependsOn: Linux_Build
   strategy:
@@ -256,10 +256,10 @@ jobs:
       targetPath: $(Build.SourcesDirectory)/MultiBUGS-binary
   - task: Cache@2
     inputs:
-      key: 'r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(JOB_START_YEAR)" | "$(JOB_START_MONTH)" | "$(JOB_START_DATE)"'
+      key: 'r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | $(JOB_START_YEAR) | $(JOB_START_MONTH) | $(JOB_START_DATE)'
       restoreKeys: |
-        r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(JOB_START_YEAR)" | "$(JOB_START_MONTH)"
-        r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(JOB_START_YEAR)"
+        r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | $(JOB_START_YEAR) | $(JOB_START_MONTH)
+        r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | $(JOB_START_YEAR)
         r-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)"
     displayName: Cache R packages
 #  - task: Cache@2
