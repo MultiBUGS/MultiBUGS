@@ -50,8 +50,15 @@ std::string ExePath(){
 }
 
 int main(int argc, char *argv[]){
-  // split args into those for mpiexec and those for BlackBox/MultiBUGS
-  std::string mpiexec_args, multibugs_args;
+#ifdef _WIN32
+  std::string quote = "\"\"\""
+#endif
+#ifdef __linux__
+    std::string quote = "\""
+#endif
+
+    // split args into those for mpiexec and those for BlackBox/MultiBUGS
+    std::string mpiexec_args, multibugs_args;
   int i = 1; // ignore exe name
   while (i < argc){
     if (// First handle two-part BlackBox/MultiBUGS arguments
@@ -66,7 +73,7 @@ int main(int argc, char *argv[]){
       multibugs_args = multibugs_args + " " + argv[i];
       if (i + 1 <= argc){
         if (strcmp(" ", argv[i + 1])){
-          multibugs_args = multibugs_args + " \"" + argv[i + 1] + "\"";
+          multibugs_args = multibugs_args + " " + quote + argv[i + 1] + quote;
         } else {
           multibugs_args = multibugs_args + " " + argv[i + 1];
         }
@@ -83,7 +90,7 @@ int main(int argc, char *argv[]){
       i++;
     } else {// Now handle any other arguments/flags
       if (strcmp(" ", argv[i])){
-        mpiexec_args = mpiexec_args + " \"" + argv[i] + "\"";
+        mpiexec_args = mpiexec_args + " " + quote + argv[i] + quote;
       } else {
         mpiexec_args = mpiexec_args + " " + argv[i];
       }
