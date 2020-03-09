@@ -33,19 +33,19 @@
 
 // Returns path to directory containing this executable
 std::string ExePath(){
-  #ifdef _WIN32
-    char buffer[MAX_PATH];
-    GetModuleFileName(NULL, buffer, MAX_PATH);
-    std::string::size_type pos = std::string(buffer).find_last_of("\\/");
-    return std::string(buffer).substr(0, pos);
-  #endif
-  #ifdef __linux__
-    char buff[PATH_MAX];
-    ssize_t len = ::readlink("/proc/self/exe", buff, sizeof(buff)-1);
-    if (len != -1) {
-      buff[len] = '\0';
-      return std::string(dirname(buff));
-    }
+#ifdef _WIN32
+  char buffer[MAX_PATH];
+  GetModuleFileName(NULL, buffer, MAX_PATH);
+  std::string::size_type pos = std::string(buffer).find_last_of("\\/");
+  return std::string(buffer).substr(0, pos);
+#endif
+#ifdef __linux__
+  char buff[PATH_MAX];
+  ssize_t len = ::readlink("/proc/self/exe", buff, sizeof(buff)-1);
+  if (len != -1) {
+    buff[len] = '\0';
+    return std::string(dirname(buff));
+  }
 #endif
 }
 
@@ -65,7 +65,11 @@ int main(int argc, char *argv[]){
         strcmp("/LANG", argv[i]) == 0){
       multibugs_args = multibugs_args + " " + argv[i];
       if (i + 1 <= argc){
-        multibugs_args = multibugs_args + " \"" + argv[i + 1] + "\"";
+        if (strcmp(" ", argv[i + 1])){
+          multibugs_args = multibugs_args + " \"" + argv[i + 1] + "\"";
+        } else {
+          multibugs_args = multibugs_args + " " + argv[i + 1];
+        }
       }
       i = i + 2;
     } else if (// Now handle BlackBox/MultiBUGS flags
@@ -78,49 +82,53 @@ int main(int argc, char *argv[]){
       multibugs_args = multibugs_args + " " + argv[i];
       i++;
     } else {// Now handle any other arguments/flags
-      mpiexec_args = mpiexec_args + " " + argv[i];
+      if (strcmp(" ", argv[i])){
+        mpiexec_args = mpiexec_args + " \"" + argv[i] + "\"";
+      } else {
+        mpiexec_args = mpiexec_args + " " + argv[i];
+      }
       i++;
     }
   }
 
-  #ifdef _WIN32
-    // build full call to mpiexec
-    std::string param =
-      " -n 1" +
-      mpiexec_args +
-      " \"" +
-      ExePath() +
-      "/OpenBUGS.exe\"" +
-      multibugs_args;
+#ifdef _WIN32
+  // build full call to mpiexec
+  std::string param =
+    " -n 1" +
+    mpiexec_args +
+    " \"" +
+    ExePath() +
+    "/OpenBUGS.exe\"" +
+    multibugs_args;
+
+  // call mpiexec
+  SHELLEXECUTEINFO ShExecInfo = {0};
+  ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
+  ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
+  ShExecInfo.hwnd = NULL;
+  ShExecInfo.lpVerb = "open";
+  ShExecInfo.lpFile = "mpiexec";
+  ShExecInfo.lpParameters = param.c_str();
+  ShExecInfo.lpDirectory = NULL;
+  ShExecInfo.nShow = SW_HIDE;
+  ShExecInfo.hInstApp = NULL;
+  ShellExecuteEx(&ShExecInfo);
+
+  // wait till mpiexec is finished
+  WaitForSingleObject(ShExecInfo.hProcess,INFINITE);
+  CloseHandle(ShExecInfo.hProcess);
+#endif
+
+#ifdef __linux__
+  // build full call to mpiexec
+  std::string param =
+    "mpiexec -n 1" +
+    mpiexec_args +
+    " \"" +
+    ExePath() +
+    "/OpenBUGS\"" +
+    multibugs_args;
   std::cout << param;
-
-    // call mpiexec
-    SHELLEXECUTEINFO ShExecInfo = {0};
-    ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
-    ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
-    ShExecInfo.hwnd = NULL;
-    ShExecInfo.lpVerb = "open";
-    ShExecInfo.lpFile = "mpiexec";
-    ShExecInfo.lpParameters = param.c_str();
-    ShExecInfo.lpDirectory = NULL;
-    ShExecInfo.nShow = SW_HIDE;
-    ShExecInfo.hInstApp = NULL;
-    ShellExecuteEx(&ShExecInfo);
-
-    // wait till mpiexec is finished
-    WaitForSingleObject(ShExecInfo.hProcess,INFINITE);
-    CloseHandle(ShExecInfo.hProcess);
-  #endif
-
-  #ifdef __linux__
-    // build full call to mpiexec
-    std::string param =
-      "mpiexec -n 1" +
-      mpiexec_args +
-      " \"" +
-      ExePath() +
-      "/OpenBUGS\"" +
-      multibugs_args;
-    std::system(param.c_str());
+  std::system(param.c_str());
 #endif
 }
