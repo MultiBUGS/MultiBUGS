@@ -64,7 +64,7 @@ int main(int argc, char *argv[]){
         strcmp("/LRTB", argv[i]) == 0 ||
         strcmp("/LANG", argv[i]) == 0){
       multibugs_args = multibugs_args + " " + argv[i];
-      if (i + 1 < argc){
+      if (i + 1 <= argc){
         multibugs_args = multibugs_args + " \"" + argv[i + 1] + "\"";
       }
       i = i + 2;
