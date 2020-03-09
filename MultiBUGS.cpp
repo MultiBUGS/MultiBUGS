@@ -50,15 +50,19 @@ std::string ExePath(){
 }
 
 int main(int argc, char *argv[]){
-#ifdef _WIN32
-  std::string quote = "\"\"\""
-#endif
-#ifdef __linux__
-    std::string quote = "\""
-#endif
 
-    // split args into those for mpiexec and those for BlackBox/MultiBUGS
-    std::string mpiexec_args, multibugs_args;
+  // Insanely, you need to triple quote on Windows to pass through the
+  // quotes - see
+  // https://docs.microsoft.com/en-us/windows/win32/api/shellapi/ns-shellapi-shellexecuteinfoa
+  // #ifdef _WIN32
+  std::string quote = "\"\"\"";
+  // #endif
+  // #ifdef __linux__
+  //   std::string quote = "\"";
+  // #endif
+
+  // split args into those for mpiexec and those for BlackBox/MultiBUGS
+  std::string mpiexec_args, multibugs_args;
   int i = 1; // ignore exe name
   while (i < argc){
     if (// First handle two-part BlackBox/MultiBUGS arguments
@@ -72,7 +76,7 @@ int main(int argc, char *argv[]){
         strcmp("/LANG", argv[i]) == 0){
       multibugs_args = multibugs_args + " " + argv[i];
       if (i + 1 <= argc){
-        if (strcmp(" ", argv[i + 1])){
+        if (std::string(argv[i + 1]).find(" ")){
           multibugs_args = multibugs_args + " " + quote + argv[i + 1] + quote;
         } else {
           multibugs_args = multibugs_args + " " + argv[i + 1];
@@ -89,7 +93,7 @@ int main(int argc, char *argv[]){
       multibugs_args = multibugs_args + " " + argv[i];
       i++;
     } else {// Now handle any other arguments/flags
-      if (strcmp(" ", argv[i])){
+      if (std::string(argv[i]).find(" ")){
         mpiexec_args = mpiexec_args + " " + quote + argv[i] + quote;
       } else {
         mpiexec_args = mpiexec_args + " " + argv[i];
@@ -136,6 +140,6 @@ int main(int argc, char *argv[]){
     "/OpenBUGS\"" +
     multibugs_args;
   std::cout << param;
-  std::system(param.c_str());
+  //  std::system(param.c_str());
 #endif
 }
