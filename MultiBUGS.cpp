@@ -50,6 +50,7 @@ std::string ExePath(){
 }
 
 int main(int argc, char *argv[]){
+  std::string quote = "\"";
   // split args into those for mpiexec and those for BlackBox/MultiBUGS
   std::string mpiexec_args, multibugs_args;
   int i = 1; // ignore exe name
@@ -64,10 +65,14 @@ int main(int argc, char *argv[]){
         strcmp("/LRTB", argv[i]) == 0 ||
         strcmp("/LANG", argv[i]) == 0){
       multibugs_args = multibugs_args + " " + argv[i];
-      if (i + 1 < argc){
-        multibugs_args = multibugs_args + " " + argv[i + 1];
-      }
-      i = i + 2;
+      if (i + 1 <= argc){
+        if (std::string(argv[i + 1]).find(" ") != std::string::npos){
+          multibugs_args = multibugs_args + " " + quote + argv[i + 1] + quote;
+        } else {
+          multibugs_args = multibugs_args + " " + argv[i + 1];
+        }
+	  }
+    i = i + 2;
     } else if (// Now handle BlackBox/MultiBUGS flags
                strcmp("/HEADLESS", argv[i]) == 0 ||
                strcmp("/PORTABLE", argv[i]) == 0 ||
@@ -78,8 +83,12 @@ int main(int argc, char *argv[]){
       multibugs_args = multibugs_args + " " + argv[i];
       i++;
     } else {// Now handle any other arguments/flags
+    if (std::string(argv[i]).find(" ") != std::string::npos){
+      mpiexec_args = mpiexec_args + " " + quote + argv[i] + quote;
+    } else {
       mpiexec_args = mpiexec_args + " " + argv[i];
-      i++;
+    }
+	i++;
     }
   }
 
