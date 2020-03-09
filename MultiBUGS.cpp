@@ -55,7 +55,7 @@ int main(int argc, char *argv[]){
   // quotes - see
   // https://docs.microsoft.com/en-us/windows/win32/api/shellapi/ns-shellapi-shellexecuteinfoa
   // #ifdef _WIN32
-  std::string quote = "\"\"\"";
+  std::string quote = "\"";
   // #endif
   // #ifdef __linux__
   //   std::string quote = "\"";
