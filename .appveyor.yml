@@ -30,16 +30,6 @@ build_script:
 
     set PATH=C:\Program Files\Microsoft MPI\Bin;%PATH%
 
-
-    rem Compiling MultiBUGS modules
-
-    c:\blackbox\bbscript.exe /USE %APPVEYOR_BUILD_FOLDER% /PAR Developer/Make.odc
-
-
-    rem Linking MultiBUGS modules
-
-    c:\blackbox\bbscript.exe /USE %APPVEYOR_BUILD_FOLDER% /PAR Developer/LinkingWindows.odc
-
     cd %APPVEYOR_BUILD_FOLDER%
 
     call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\vcvars32.bat"
@@ -49,6 +39,15 @@ build_script:
     cvtres -machine:ix86 -out:Bugslogo.obj Win/Rsrc/Bugslogo.res
     
     cl /EHsc MultiBUGS.cpp /link shell32.lib Bugslogo.obj /subsystem:windows /entry:mainCRTStartup
+
+    rem Compiling MultiBUGS modules
+
+    c:\blackbox\bbscript.exe /USE %APPVEYOR_BUILD_FOLDER% /PAR Developer/Make.odc
+
+
+    rem Linking MultiBUGS modules
+
+    c:\blackbox\bbscript.exe /USE %APPVEYOR_BUILD_FOLDER% /PAR Developer/LinkingWindows.odc
 
     mkdir c:\MultiBUGS\Dynamic\Sym
 
