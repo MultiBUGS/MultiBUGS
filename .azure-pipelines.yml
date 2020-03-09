@@ -311,11 +311,11 @@ jobs:
     displayName: Install R, 32-bit MPICH, and 32-bit GTK libraries
   - script: |
       # needed for devtools
-      sudo apt-get update
-      sudo apt-get install libcurl4-openssl-dev
-      sudo apt-get install libssl-dev
-      sudo apt-get install libgit2-dev
-      sudo apt-get install libssh2-1-dev
+      # sudo apt-get update
+      # sudo apt-get install libcurl4-openssl-dev
+      # sudo apt-get install libssl-dev
+      # sudo apt-get install libgit2-dev
+      # sudo apt-get install libssh2-1-dev
       Rscript -e "install.packages(c(\"remotes\", \"xml2\"), repos=\"https://cloud.r-project.org\")" -e "remotes::install_github(c(\"MultiBUGS/R2MultiBUGS\", \"MultiBUGS/multibugstests\"))"
     displayName: Install required R packages
   - script: |
