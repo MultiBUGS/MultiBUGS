@@ -60,8 +60,8 @@ build_script:
 
     Rscript.exe
     -e "install.packages(\"remotes\", repos=\"https://cloud.r-project.org\")"
-    -e "devtools::install_github(\"MultiBUGS/R2MultiBUGS\")"
-    -e "devtools::install_github(\"MultiBUGS/multibugstests\")"
+    -e "remotes::install_github(\"MultiBUGS/R2MultiBUGS\")"
+    -e "remotes::install_github(\"MultiBUGS/multibugstests\")"
 test_script:
 - cmd: >-
     Rscript.exe -e "library(R2MultiBUGS); library(multibugstests); bugs_examples_all(n.workers = 2, n.chains = 1, report = \"appveyor\", exclude = c(\"ChangePoints\", \"Ice\", \"Lsat\", \"Pines\", \"StVeit\", \"Sixcomp\", \"Leukfr\", \"Curves\", \"Hald\"))" &
