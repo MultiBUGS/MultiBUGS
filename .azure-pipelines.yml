@@ -255,15 +255,15 @@ jobs:
     inputs:
       artifactName: 'MultiBUGS-Linux'
       targetPath: $(Build.SourcesDirectory)/MultiBUGS-binary
-  - task: Cache@2
-    inputs:
-      key: 'r-cache-static2 | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(JOB_START_YEAR)" | "$(JOB_START_MONTH)" | "$(JOB_START_DATE)"'
-      restoreKeys: |
-        r-cache-static2 | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(JOB_START_YEAR) | "$(JOB_START_MONTH)"
-        r-cache-static2 | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(JOB_START_YEAR)"
-        r-cache-static2 | "$(Agent.OS)" | "$(Agent.OSArchitecture)"
-      path: /usr/local/lib/R/site-library
-    displayName: Cache R packages
+# - task: Cache@2
+#   inputs:
+#     key: 'r-cache-static2 | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(JOB_START_YEAR)" | "$(JOB_START_MONTH)" | "$(JOB_START_DATE)"'
+#     restoreKeys: |
+#       r-cache-static2 | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(JOB_START_YEAR) | "$(JOB_START_MONTH)"
+#       r-cache-static2 | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(JOB_START_YEAR)"
+#       r-cache-static2 | "$(Agent.OS)" | "$(Agent.OSArchitecture)"
+#     path: /usr/local/lib/R/site-library
+#   displayName: Cache R packages
 #  - task: Cache@2
 #    inputs:
 #      key: 'apt-cache-static | "$(Agent.OS)" | "$(Agent.OSArchitecture)" | "$(JOB_START_YEAR)" | "$(JOB_START_MONTH)" | "$(JOB_START_DATE)"'
