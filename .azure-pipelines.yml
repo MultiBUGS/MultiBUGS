@@ -22,6 +22,7 @@ jobs:
       c:\blackbox\bbscript.exe /USE %BUILD_SOURCESDIRECTORY% /PAR Developer/Make.odc
       c:\blackbox\bbscript.exe /USE %BUILD_SOURCESDIRECTORY% /PAR Developer/LinkingWindows.odc
       cd %BUILD_SOURCESDIRECTORY%
+      rm MultiBUGS.exe
       call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars32.bat"
       rc -fo Win/Rsrc/Bugslogo.res Win/Rsrc/Bugslogo.rc
       cvtres -machine:ix86 -out:Bugslogo.obj Win/Rsrc/Bugslogo.res
