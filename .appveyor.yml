@@ -59,7 +59,7 @@ build_script:
     7z a %APPVEYOR_BUILD_FOLDER%/MultiBUGS.zip c:\MultiBUGS
 
     Rscript.exe
-    -e "install.packages(\"devtools\", repos=\"https://cloud.r-project.org\")"
+    -e "install.packages(\"remotes\", repos=\"https://cloud.r-project.org\")"
     -e "devtools::install_github(\"MultiBUGS/R2MultiBUGS\")"
     -e "devtools::install_github(\"MultiBUGS/multibugstests\")"
 test_script:
