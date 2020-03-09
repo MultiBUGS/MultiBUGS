@@ -50,17 +50,8 @@ std::string ExePath(){
 }
 
 int main(int argc, char *argv[]){
-
-  // Insanely, you need to triple quote on Windows to pass through the
-  // quotes - see
-  // https://docs.microsoft.com/en-us/windows/win32/api/shellapi/ns-shellapi-shellexecuteinfoa
-  // #ifdef _WIN32
   std::string quote = "\"";
-  // #endif
-  // #ifdef __linux__
-  //   std::string quote = "\"";
-  // #endif
-
+  
   // split args into those for mpiexec and those for BlackBox/MultiBUGS
   std::string mpiexec_args, multibugs_args;
   int i = 1; // ignore exe name
@@ -139,7 +130,6 @@ int main(int argc, char *argv[]){
     ExePath() +
     "/OpenBUGS\"" +
     multibugs_args;
-  std::cout << param;
-  //  std::system(param.c_str());
+  std::system(param.c_str());
 #endif
 }
