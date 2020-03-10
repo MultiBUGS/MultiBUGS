@@ -1,6 +1,6 @@
 jobs:
 - job: Windows_Build
-  displayName: Win Build
+  displayName: win_build
   timeoutInMinutes: 0
   pool:
     vmImage: 'windows-2019'
@@ -34,7 +34,7 @@ jobs:
       artifactName: 'MultiBUGS-Windows'
       targetPath: c:\MultiBUGS
 - job: Windows_Tests
-  displayName: Win Test
+  displayName: win
   dependsOn: Windows_Build
   strategy:
     matrix:
@@ -96,7 +96,7 @@ jobs:
     condition: always()
     displayName: 'Publish test results'
 - job: Linux_Build
-  displayName: Lin Build
+  displayName: lin_build
   timeoutInMinutes: 0
   pool:
     vmImage: 'ubuntu-16.04'
@@ -240,33 +240,39 @@ jobs:
       artifactName: 'MultiBUGS-Linux'
       targetPath: $(Build.SourcesDirectory)/MultiBUGS-binary
 - job: Linux_Tests
-  displayName: Lin Test
+  displayName: lin
   dependsOn: Linux_Build
   strategy:
     matrix:
       1ch_1w_main:
         CHAINS: '1'
         WORKERS: '1'
+        MPI: 'apt'
         SUITE: 'main'
       2ch_1w_main:
         CHAINS: '2'
         WORKERS: '1'
+        MPI: 'source'
         SUITE: 'main'
       1ch_2w_main:
         CHAINS: '1'
         WORKERS: '2'
+        MPI: 'source'
         SUITE: 'main'
-      1ch_1w_relia:
+      1ch_1w_oth:
         CHAINS: '1'
         WORKERS: '1'
+        MPI: 'apt'
         SUITE: 'other'
-      2ch_1w_relia:
+      2ch_1w_oth:
         CHAINS: '2'
         WORKERS: '1'
+        MPI: 'source'
         SUITE: 'other'
-      1ch_2w_relia:
+      1ch_2w_oth:
         CHAINS: '1'
         WORKERS: '2'
+        MPI: 'source'
         SUITE: 'other'
   timeoutInMinutes: 0
   pool:
