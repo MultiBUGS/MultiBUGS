@@ -50,15 +50,15 @@ jobs:
         CHAINS: '1'
         WORKERS: '2'
         SUITE: 'main'
-      1ch_1w_relia:
+      1ch_1w_other:
         CHAINS: '1'
         WORKERS: '1'
         SUITE: 'other'
-      2ch_1w_relia:
+      2ch_1w_other:
         CHAINS: '2'
         WORKERS: '1'
         SUITE: 'other'
-      1ch_2w_relia:
+      1ch_2w_other:
         CHAINS: '1'
         WORKERS: '2'
         SUITE: 'other'
@@ -90,7 +90,7 @@ jobs:
     displayName: Run tests
   - task: PublishTestResults@2
     inputs:
-      testResultsFiles: 'C:\MultiBUGS\TESTS-*$(WORKERS)workers-$(CHAINS)chains-$(SUITE).xml'
+      testResultsFiles: 'C:\MultiBUGS\TESTS-*$(WORKERS)workers-$(CHAINS)chains.xml'
       mergeTestResults: true
       testRunTitle: 'Windows: $(WORKERS) workers; $(CHAINS) chains; $(SUITE)'
     condition: always()
@@ -352,7 +352,7 @@ jobs:
     displayName: Publish screenshot of final result
   - task: PublishTestResults@2
     inputs:
-      testResultsFiles: '$(Build.SourcesDirectory)/MultiBUGS-binary/TESTS-*$(WORKERS)workers-$(CHAINS)chains-$(SUITE).xml'
+      testResultsFiles: '$(Build.SourcesDirectory)/MultiBUGS-binary/TESTS-*$(WORKERS)workers-$(CHAINS)chains.xml'
       mergeTestResults: true
       testRunTitle: 'Linux: $(WORKERS)workers; $(CHAINS)chains; $(SUITE)'
     condition: always()
