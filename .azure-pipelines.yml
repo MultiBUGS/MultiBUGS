@@ -1,6 +1,6 @@
 jobs:
 - job: Windows_Build
-  displayName: Windows Build
+  displayName: win_build
   timeoutInMinutes: 0
   pool:
     vmImage: 'windows-2019'
@@ -34,20 +34,34 @@ jobs:
       artifactName: 'MultiBUGS-Windows'
       targetPath: c:\MultiBUGS
 - job: Windows_Tests
-  displayName: Windows Tests
+  displayName: win
   dependsOn: Windows_Build
   strategy:
     matrix:
-      1chain_1worker:
+      1ch_1w_main:
         CHAINS: '1'
         WORKERS: '1'
-      2chains_1worker:
+        SUITE: 'main'
+      2ch_1w_main:
         CHAINS: '2'
         WORKERS: '1'
-      1chain_2workers:
+        SUITE: 'main'
+      1ch_2w_main:
         CHAINS: '1'
         WORKERS: '2'
-  timeoutInMinutes: 0
+        SUITE: 'main'
+      1ch_1w_other:
+        CHAINS: '1'
+        WORKERS: '1'
+        SUITE: 'other'
+      2ch_1w_other:
+        CHAINS: '2'
+        WORKERS: '1'
+        SUITE: 'other'
+      1ch_2w_other:
+        CHAINS: '1'
+        WORKERS: '2'
+        SUITE: 'other'
   pool:
     vmImage: 'windows-2019'
   steps:
@@ -70,19 +84,19 @@ jobs:
   - script: |
       echo on
       set PATH=C:\Program Files\Microsoft MPI\Bin;C:\Program Files\R\R-3.5.1\bin\x64;%PATH%
-      Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", exclude = c(\"StVeit\", \"Sixcomp\", \"Curves\", \"Hald\"))"
-      Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
-      Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\", exclude = c(\"MVCAR\"))"
+      IF "%SUITE%"=="main" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", exclude = c(\"StVeit\", \"Sixcomp\", \"Curves\", \"Hald\"))"
+      IF "%SUITE%"=="other" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
+      IF "%SUITE%"=="other" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\", exclude = c(\"MVCAR\"))"
     displayName: Run tests
   - task: PublishTestResults@2
     inputs:
       testResultsFiles: 'C:\MultiBUGS\TESTS-*$(WORKERS)workers-$(CHAINS)chains.xml'
       mergeTestResults: true
-      testRunTitle: '$(WORKERS) workers; $(CHAINS) chains'
+      testRunTitle: 'Windows: $(WORKERS) workers; $(CHAINS) chains; $(SUITE)'
     condition: always()
     displayName: 'Publish test results'
 - job: Linux_Build
-  displayName: Linux Build
+  displayName: lin_build
   timeoutInMinutes: 0
   pool:
     vmImage: 'ubuntu-16.04'
@@ -226,22 +240,40 @@ jobs:
       artifactName: 'MultiBUGS-Linux'
       targetPath: $(Build.SourcesDirectory)/MultiBUGS-binary
 - job: Linux_Tests
-  displayName: Linux Tests
+  displayName: lin
   dependsOn: Linux_Build
   strategy:
     matrix:
-      1chain_1worker:
+      1ch_1w_main:
         CHAINS: '1'
         WORKERS: '1'
         MPI: 'apt'
-      2chains_1worker:
+        SUITE: 'main'
+      2ch_1w_main:
         CHAINS: '2'
         WORKERS: '1'
         MPI: 'source'
-      1chain_2workers:
+        SUITE: 'main'
+      1ch_2w_main:
         CHAINS: '1'
         WORKERS: '2'
         MPI: 'source'
+        SUITE: 'main'
+      1ch_1w_oth:
+        CHAINS: '1'
+        WORKERS: '1'
+        MPI: 'apt'
+        SUITE: 'other'
+      2ch_1w_oth:
+        CHAINS: '2'
+        WORKERS: '1'
+        MPI: 'source'
+        SUITE: 'other'
+      1ch_2w_oth:
+        CHAINS: '1'
+        WORKERS: '2'
+        MPI: 'source'
+        SUITE: 'other'
   timeoutInMinutes: 0
   pool:
     vmImage: 'ubuntu-16.04'
@@ -297,29 +329,32 @@ jobs:
       sleep 5
       export DISPLAY=":99"
       cd ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary
-      #Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", include = c(\"Rats\"))"
-      Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", exclude = c(\"StVeit\", \"Sixcomp\", \"Curves\", \"Hald\"))"
-      Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/Reliability/Examples/\", exclude = c(\"InvGaussian\", \"WeibullShifted\"))"
-      Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/GeoBUGS/Examples/\", exclude = c(\"MVCAR\"))"
+      if [ "$SUITE" == "main" ]; then
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", exclude = c(\"StVeit\", \"Sixcomp\", \"Curves\", \"Hald\"))"
+      fi
+      if [ "$SUITE" == "other" ]; then
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/Reliability/Examples/\", exclude = c(\"InvGaussian\", \"WeibullShifted\"))"
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/GeoBUGS/Examples/\", exclude = c(\"MVCAR\"))"
+      fi
     #timeoutInMinutes: 5
     continueOnError: true
     displayName: Run tests
   - script: |
       cd ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary
-      DISPLAY=:99 import -window root screenshot-${WORKERS}workers-${CHAINS}chains.png
+      DISPLAY=:99 import -window root screenshot-${WORKERS}workers-${CHAINS}chains-${SUITE}.png
     condition: always()
     displayName: Take screenshot of final result
   - task: PublishPipelineArtifact@0
     inputs:
-      artifactName: 'Screenshot with $(WORKERS) workers and $(CHAINS) chains'
-      targetPath: '$(Build.SourcesDirectory)/MultiBUGS-binary/screenshot-$(WORKERS)workers-$(CHAINS)chains.png'
+      artifactName: 'Linux screenshot: $(WORKERS) workers; $(CHAINS) chains; $(SUITE)'
+      targetPath: '$(Build.SourcesDirectory)/MultiBUGS-binary/screenshot-$(WORKERS)workers-$(CHAINS)chains-$(SUITE).png'
     condition: always()
     displayName: Publish screenshot of final result
   - task: PublishTestResults@2
     inputs:
       testResultsFiles: '$(Build.SourcesDirectory)/MultiBUGS-binary/TESTS-*$(WORKERS)workers-$(CHAINS)chains.xml'
       mergeTestResults: true
-      testRunTitle: '$(WORKERS) workers; $(CHAINS) chains'
+      testRunTitle: 'Linux: $(WORKERS)workers; $(CHAINS)chains; $(SUITE)'
     condition: always()
     displayName: 'Publish test results'
 schedules:
