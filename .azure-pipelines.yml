@@ -347,12 +347,12 @@ jobs:
   - task: PublishPipelineArtifact@0
     inputs:
       artifactName: 'Screenshot with $(WORKERS) workers and $(CHAINS) chains'
-      targetPath: '$(Build.SourcesDirectory)/MultiBUGS-binary/screenshot-$(WORKERS)workers-$(CHAINS)chains-${SUITE}.png'
+      targetPath: '$(Build.SourcesDirectory)/MultiBUGS-binary/screenshot-$(WORKERS)workers-$(CHAINS)chains-$(SUITE).png'
     condition: always()
     displayName: Publish screenshot of final result
   - task: PublishTestResults@2
     inputs:
-      testResultsFiles: '$(Build.SourcesDirectory)/MultiBUGS-binary/TESTS-*$(WORKERS)workers-$(CHAINS)chains-${SUITE}.xml'
+      testResultsFiles: '$(Build.SourcesDirectory)/MultiBUGS-binary/TESTS-*$(WORKERS)workers-$(CHAINS)chains-$(SUITE).xml'
       mergeTestResults: true
       testRunTitle: '$(WORKERS) workers; $(CHAINS) chains'
     condition: always()
