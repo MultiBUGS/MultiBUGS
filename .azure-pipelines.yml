@@ -39,15 +39,42 @@ jobs:
   dependsOn: Windows_Build
   strategy:
     matrix:
-      1chain_1worker:
+      1ch_1w_main:
         CHAINS: '1'
         WORKERS: '1'
-      2chains_1worker:
+        SUITE: 'main'
+      2ch_1w_main:
         CHAINS: '2'
         WORKERS: '1'
-      1chain_2workers:
+        SUITE: 'main'
+      1ch_2w_main:
         CHAINS: '1'
         WORKERS: '2'
+        SUITE: 'main'
+      1ch_1w_relia:
+        CHAINS: '1'
+        WORKERS: '1'
+        SUITE: 'relia'
+      2ch_1w_relia:
+        CHAINS: '2'
+        WORKERS: '1'
+        SUITE: 'relia'
+      1ch_2w_relia:
+        CHAINS: '1'
+        WORKERS: '2'
+        SUITE: 'relia'
+      1ch_1w_geo:
+        CHAINS: '1'
+        WORKERS: '1'
+        SUITE: 'geo'
+      2ch_1w_geo:
+        CHAINS: '2'
+        WORKERS: '1'
+        SUITE: 'geo'
+      1ch_2w_geo:
+        CHAINS: '1'
+        WORKERS: '2'
+        SUITE: 'geo'
   timeoutInMinutes: 0
   pool:
     vmImage: 'windows-2019'
@@ -66,20 +93,20 @@ jobs:
       echo on
       choco install r.project --version 3.5.1 --no-progress
       set PATH=C:\Program Files\Microsoft MPI\Bin;C:\Program Files\R\R-3.5.1\bin\x64;%PATH%
-      Rscript.exe -e "install.packages(c(\"remotes\", \"xml2\"), repos=\"https://cloud.r-project.org\", type = \"binary\")" -e "remotes::install_github(c(\"MultiBUGS/R2MultiBUGS\", \"MultiBUGS/multibugstests\"))"
+      Rscript.exe -e "install.packages(c(\"devtools\", \"xml2\"), repos=\"https://cloud.r-project.org\", type = \"binary\")" -e "devtools::install_github(c(\"MultiBUGS/R2MultiBUGS\", \"MultiBUGS/multibugstests\"))"
     displayName: Install R and required packages
   - script: |
       echo on
       set PATH=C:\Program Files\Microsoft MPI\Bin;C:\Program Files\R\R-3.5.1\bin\x64;%PATH%
-      Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", exclude = c(\"StVeit\", \"Sixcomp\", \"Curves\", \"Hald\"))"
-      Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
-      Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\", exclude = c(\"MVCAR\"))"
+      IF "%SUITE%"=="main" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", exclude = c(\"StVeit\", \"Sixcomp\", \"Curves\", \"Hald\"))"
+      IF "%SUITE%"=="relia" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
+      IF "%SUITE%"=="geo" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\", exclude = c(\"MVCAR\"))"
     displayName: Run tests
   - task: PublishTestResults@2
     inputs:
-      testResultsFiles: 'C:\MultiBUGS\TESTS-*$(WORKERS)workers-$(CHAINS)chains.xml'
+      testResultsFiles: 'C:\MultiBUGS\TESTS-*$(WORKERS)workers-$(CHAINS)chains-$(SUITE).xml'
       mergeTestResults: true
-      testRunTitle: '$(WORKERS) workers; $(CHAINS) chains'
+      testRunTitle: '$(WORKERS) workers; $(CHAINS) chains; $(SUITE)'
     condition: always()
     displayName: 'Publish test results'
 - job: Linux_Build
