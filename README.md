@@ -82,7 +82,7 @@ We recommend using the stable version from the main [MultiBUGS website](https://
 
 On Debian/Ubuntu-based systems
 
-1. Install [BlackBox Cross-Platform](https://blackbox.obertone.ru/download).
+1. Install [BlackBox Cross-Platform](https://blackbox.oberon.org/download).
 
 2. Install 32-bit [MPICH](https://www.mpich.org)
 
