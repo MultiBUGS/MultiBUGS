@@ -79,7 +79,7 @@ jobs:
       echo on
       choco install r.project --version 3.5.1 --no-progress
       set PATH=C:\Program Files\Microsoft MPI\Bin;C:\Program Files\R\R-3.5.1\bin\x64;%PATH%
-      Rscript.exe -e "install.packages(c(\"remotes\", \"xml2\"), repos=\"https://cloud.r-project.org\", type = \"binary\")" -e "remotes::install_github(c(\"MultiBUGS/R2MultiBUGS\", \"MultiBUGS/multibugstests\"))"
+      Rscript.exe -e "Sys.setenv(TZ='GMT')" -e "install.packages(c(\"remotes\", \"xml2\"), repos=\"https://cloud.r-project.org\", type = \"binary\")" -e "remotes::install_github(c(\"MultiBUGS/R2MultiBUGS\", \"MultiBUGS/multibugstests\"))"
     displayName: Install R and required packages
   - script: |
       echo on
