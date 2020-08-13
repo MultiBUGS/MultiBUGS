@@ -310,7 +310,7 @@ jobs:
         sudo apt-get install -y software-properties-common curl
         MPICH_VERSION=3.3.2
         cd /tmp
-        curl --retry 3 http://www.mpich.org/static/downloads/${MPICH_VERSION}/mpich-${MPICH_VERSION}.tar.gz | tar xz
+        curl --retry 3 https://www.mpich.org/static/downloads/${MPICH_VERSION}/mpich-${MPICH_VERSION}.tar.gz | tar xz
         cd mpich-${MPICH_VERSION}
         ./configure --enable-fast=all,O3 CC=gcc MPICHLIB_CFLAGS=-m32 --prefix=/usr --with-device=ch3:sock --disable-fortran --disable-cxx
         make -j 4
