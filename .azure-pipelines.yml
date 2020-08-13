@@ -319,7 +319,7 @@ jobs:
       fi
     displayName: Install R, 32-bit MPICH, and 32-bit GTK libraries
   - script: |
-      Rscript -e "install.packages(c(\"remotes\", \"xml2\"), repos=\"https://cloud.r-project.org\")" -e "remotes::install_github(c(\"MultiBUGS/R2MultiBUGS\", \"MultiBUGS/multibugstests\"))"
+      Rscript -e "options(repos = c(xenial_binary = 'https://packagemanager.rstudio.com/all/__linux__/xenial/latest'))" -e "install.packages(c(\"remotes\", \"xml2\"), repos=\"https://cloud.r-project.org\")" -e "remotes::install_github(c(\"MultiBUGS/R2MultiBUGS\", \"MultiBUGS/multibugstests\"))"
     displayName: Install required R packages
   - script: |
       mkdir -p /tmp/.X11-unix
