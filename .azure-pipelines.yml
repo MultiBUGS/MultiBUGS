@@ -101,10 +101,6 @@ jobs:
     vmImage: 'ubuntu-16.04'
   steps:
   - script: |
-      # Uninstalling these packages is NOT needed for MultiBUGS, but vastly speeds up apt-get update on Azure
-      sudo apt-get -qq remove '^libmono.*' '^mono.*' '^php.*'
-    displayName: Uninstall unnecessary packages
-  - script: |
       sudo dpkg --add-architecture i386
       sudo apt-get -qq -y update
       sudo apt-get install libgtk2.0-0:i386 gtk2-engines:i386 gtk2-engines-murrine:i386 libcanberra-gtk-module:i386 gnome-icon-theme-full
@@ -282,15 +278,10 @@ jobs:
       artifactName: 'MultiBUGS-Linux'
       targetPath: $(Build.SourcesDirectory)/MultiBUGS-binary
   - script: |
-      # Uninstalling these packages is NOT needed for MultiBUGS, but vastly speeds up apt-get update on Azure
       chmod +x $(Build.SourcesDirectory)/MultiBUGS-binary/MultiBUGS
       chmod +x $(Build.SourcesDirectory)/MultiBUGS-binary/OpenBUGS
       chmod +x $(Build.SourcesDirectory)/MultiBUGS-binary/run-MultiBUGS
     displayName: Set permissions for MultiBUGS
-  - script: |
-      # Uninstalling these packages is NOT needed for MultiBUGS, but vastly speeds up apt-get update on Azure
-      sudo apt-get -qq remove '^libmono.*' '^mono.*' '^php.*'
-    displayName: Uninstall unnecessary packages
   - script: |
       sudo dpkg --add-architecture i386
       sudo add-apt-repository -y "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -sc)-cran35/"
