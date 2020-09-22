@@ -229,6 +229,8 @@ jobs:
       chmod +x MultiBUGS-binary/OpenBUGS
       chmod +x MultiBUGS-binary/MultiBUGS
       chmod +x MultiBUGS-binary/run-MultiBUGS
+      rm MultiBUGS-binary/MultiBUGS.exe
+      rm MultiBUGS-binary/libtaucs.dll
     displayName: Build MultiBUGS
   - task: PublishPipelineArtifact@0
     inputs:
