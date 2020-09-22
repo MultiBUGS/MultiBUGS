@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=MultiBUGS
+Comment=A parallel implementation of the BUGS modelling framework for faster Bayesian inference
+Exec=/usr/bin/multibugs-shortcut
+Path=
+Icon=/usr/share/pixmaps/multibugs.svg
+Categories=Development;
+Version={#VERSION}
+Type=Application
+Terminal=0
+StartupWMClass=OpenBUGS

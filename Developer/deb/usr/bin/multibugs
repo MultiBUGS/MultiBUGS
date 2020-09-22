@@ -1,0 +1,15 @@
+#!/bin/sh
+
+pd="/usr/lib/multibugs"
+sd=`readlink -f .`
+
+# fix Ubuntu-specific problems:
+unset UBUNTU_MENUPROXY
+unset GTK_MODULES
+export LIBOVERLAY_SCROLLBAR=0
+
+# export LD_DEBUG=all
+env \
+	BB_PRIMARY_DIR="${pd}" BB_SECONDARY_DIR="${sd}" \
+	BB_PACKED_NAME="MultiBUGS" \
+	"${pd}"/MultiBUGS "${@}"

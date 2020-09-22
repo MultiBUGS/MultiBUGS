@@ -1,0 +1,6 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: MultiBUGS
+Source: https://github.com/MultiBUGS/MultiBUGS
+
+Files: *
+MultiBUGS is licensed under LGPL-3.0 (GNU Lesser General Public License v3.0). On Debian systems the complete text of the LGPL-3.0 is in /usr/share/common-licenses/LGPL-3
