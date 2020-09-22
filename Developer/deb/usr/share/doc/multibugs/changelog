@@ -1,0 +1,11 @@
+multibugs (2.0-1) unstable; urgency=low
+
+  * More memory efficient distribution of models
+  * Added spatial models
+  * Added Reliability models
+  * Linux beta version
+  * Adopted reverse-mode evaluation
+  * Standardised cdf, pdf, deviance function names
+  * icSet(), icStats(), icClear() script functions since WAIC and DIC both reported
+
+ -- Andrew Thomas <andrew.thomas@mrc-bsu.cam.ac.uk>  Wed, 23 Sep 2020 00:00:00 +0100

@@ -117,7 +117,8 @@ jobs:
     displayName: Install BlackBox
   - script: |
       cd ${BUILD_SOURCESDIRECTORY}
-      g++ -m32 -o MultiBUGS MultiBUGS.cpp
+      # -s strips the binary of debug symbols to keep lintian happy
+      g++ -m32 -s -o MultiBUGS MultiBUGS.cpp
       BBINSTALLDIR="${AGENT_HOMEDIRECTORY}/bbcb/BlackBox"
       Developer/BuildLinux | ${BBINSTALLDIR}/run-dev0
       cp -r ${BBINSTALLDIR}/Cons MultiBUGS-binary/
@@ -231,11 +232,37 @@ jobs:
       chmod +x MultiBUGS-binary/run-MultiBUGS
       rm MultiBUGS-binary/MultiBUGS.exe
       rm MultiBUGS-binary/libtaucs.dll
+      cp --recursive MultiBUGS-binary multibugs
+      tar --create --gzip --verbose --file=multibugs_2.0.tar.gz multibugs
     displayName: Build MultiBUGS
   - task: PublishPipelineArtifact@0
     inputs:
       artifactName: 'MultiBUGS-Linux'
       targetPath: $(Build.SourcesDirectory)/MultiBUGS-binary
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'multibugs_2.0.tar.gz'
+      targetPath: $(Build.SourcesDirectory)/multibugs_2.0.tar.gz
+  - script: |
+      cd ${BUILD_SOURCESDIRECTORY}
+      mv Developer/deb multibugs_2.0-1
+      mkdir -p multibugs_2.0-1/usr/lib/
+      mv MultiBUGS-binary multibugs_2.0-1/usr/lib/multibugs
+      find multibugs_2.0-1/usr/lib/multibugs -type d -print0 | xargs -0 chmod 0755 
+      gzip --no-name --best multibugs_2.0-1/usr/share/doc/multibugs/changelog
+      gzip --no-name --best multibugs_2.0-1/usr/share/doc/multibugs/changelog.Debian
+      chmod +x multibugs_2.0-1/usr/bin/multibugs
+      chmod +x multibugs_2.0-1/usr/bin/multibugs-shortcut
+      chmod +x multibugs_2.0-1/usr/lib/multibugs/Developer/BuildLinux
+      fakeroot dpkg-deb --build multibugs_2.0-1
+      ls -la
+      sudo apt-get install lintian
+      lintian multibugs_2.0-1.deb
+    displayName: Create deb
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'multibugs_2.0-1'
+      targetPath: $(Build.SourcesDirectory)/multibugs_2.0-1.deb
 - job: Linux_Tests
   displayName: lin
   dependsOn: Linux_Build
