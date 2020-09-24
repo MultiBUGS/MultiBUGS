@@ -46,7 +46,7 @@ We recommend using the stable version from the main [MultiBUGS website](https://
 
 1. Download and install [Microsoft MPI (MS-MPI)](https://docs.microsoft.com/en-us/message-passing-interface/microsoft-mpi#ms-mpi-downloads). Version 8.1 or newer is required, since MultiBUGS uses `MPI_Comm_spawn`. This framework allows running parallel applications on the Windows platform.
 
-2. Download and install [BlackBox 1.7.1](http://blackboxframework.org/index.php?cID=goto-download-page,en-us) from the BlackBox Framework Center. This is the framework that MultiBUGS is written using.
+2. Download and install [BlackBox 1.7.2](http://blackboxframework.org/index.php?cID=goto-download-page,en-us) from the BlackBox Framework Center. This is the framework that MultiBUGS is written using.
 
 3. Download the [zip archive](https://github.com/MultiBUGS/MultiBUGS/archive/master.zip) of MultiBUGS. Unzip this to, for example, `C:\`
 
@@ -99,11 +99,9 @@ On Debian/Ubuntu-based systems
     bbcb
     ```
 
-4. Open `MPIliblinux.odc` within `Mod` within `System`. Edit the name of the shared object to match that on your install of libmpich. (This will be automated in the future.)
+4. Within MultiBUGS/BlackBox open `MakeLinux.odc`, which is found in the `Developer` directory in the MultiBUGS directory. Click on the `!` beside `DevCompiler.CompileThis`. This will compile MultiBUGS. Once compiling is finished the status bar should say "ok".
 
-5. Within MultiBUGS/BlackBox open `MakeLinux.odc`, which is found in the `Developer` directory in the MultiBUGS directory. Click on the `!` beside `DevCompiler.CompileThis`. This will compile MultiBUGS. Once compiling is finished the status bar should say "ok".
-
-6. Start up MultiBUGS under MPI
+5. Start up MultiBUGS under MPI
 
     ```
     mpiexec -n 1 bbcb
