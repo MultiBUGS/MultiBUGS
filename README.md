@@ -15,12 +15,12 @@ See the [MultiBUGS website](https://www.multibugs.org) for further details.
 
 If you use MultiBUGS in your published work, please cite
 
-Goudie, R. J. B., Turner, R. M., De Angelis, D., Thomas, A. (in press) MultiBUGS: A parallel implementation of the BUGS modelling framework for faster Bayesian inference. Journal of Statistical Software. [arXiv:1704.03216](https://arxiv.org/abs/1704.03216)
+Goudie, R. J. B., Turner, R. M., De Angelis, D., Thomas, A. (2020) MultiBUGS: A parallel implementation of the BUGS modelling framework for faster Bayesian inference. Journal of Statistical Software, 95(7). [doi:10.18637/jss.v095.i07](https://doi.org/10.18637/jss.v095.i07)
 
 ## Installation
 
 See the main [MultiBUGS website](https://www.multibugs.org) for installation instructions of the current released version.
-The current released version of MultiBUGS works only on Windows and requires [Microsoft MPI (MSI-MPI)](https://msdn.microsoft.com/en-us/library/bb524831(v=vs.85).aspx) (>= v8.1).
+The current released version of MultiBUGS works on Windows (with [Microsoft MPI (MSI-MPI)](https://msdn.microsoft.com/en-us/library/bb524831(v=vs.85).aspx), version >=8.1) or Linux.
 
 ## Pre-built unstable development versions
 
@@ -36,7 +36,7 @@ We recommend using the stable version from the main [MultiBUGS website](https://
 
 ### Linux pre-built unstable binaries
 
-Pre-built Linux binaries in preparation
+Pre-built unstable Linux binaries available from Azure Pipeline.
 
 ## Compiling from source
 
