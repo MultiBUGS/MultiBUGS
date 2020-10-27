@@ -3,7 +3,13 @@
 IFS='' read -r -d '' modules_to_make <<"EOF"
 HostMenusLinux
 
-Environment("OS":"Linux") MPI MPIlib MPIlibmpiso12 MPIlibmpichso12 MPIlibmpichso0 MPIlibmpichso10 MPIimp MPIimplibmpiso12 MPIimplibmpichso12 MPIimplibmpichso0 MPIimplibmpichso10 MPImaster MPIworker
+Environment("OS":"Linux")
+MpiMPI  MpiMaster MpiWorker
+MpiMslib MpiMsimp 
+MpiLibmpiso12 MpiImpmpiso12
+MpiLibmpichso12 MpiImpmpichso12 
+MpiLibmpichso0 MpiImpmpichso0
+MpiLibmpichso10 MpiImpmpichso10
 
 MathSort MathFunc MathMatrix MathSparsematrix MathTaucsLib MathTaucsImp
 MathCumulative MathRandnum MathODE MathFunctional MathRungeKutta45 MathAESolver MathIntegrate MathTT800 MathDiagmatrix MathBGR MathSmooth MathJacobi
@@ -14,24 +20,21 @@ BugsInterpreter BugsScripts BugsScripting
 
 BugsRandnum
 
-GraphRules GraphNodes GraphGrammar GraphLogical GraphStochastic GraphScalar  GraphLinkfunc GraphKernel GraphVector GraphWeight GraphUnivariate GraphMultivariate GraphConjugateUV GraphConjugateMV GraphChain GraphMRF GraphUVMRF  GraphUVGMRF GraphMVGMRF GraphVD GraphVDDescrete GraphVDContinuous GraphFunctional GraphMessages GraphResources GraphJacobi
+GraphRules GraphGrammar GraphNodes GraphLogical GraphStochastic GraphScalar  GraphLinkfunc GraphKernel GraphVector GraphUnivariate GraphMultivariate GraphConjugateUV GraphConjugateMV GraphChain GraphMRF  GraphGMRF GraphVD GraphVDDescrete GraphVDContinuous GraphFunctional  GraphJacobi GraphMessages GraphResources
 
 GraphDummy GraphDummyMV GraphSentinel GraphDeviance
 
 MonitorMonitors MonitorSamples MonitorSamplesDisc MonitorSummary MonitorDeviance MonitorPlugin MonitorRanks MonitorModel
 
-UpdaterUpdaters UpdaterMethods UpdaterUnivariate UpdaterMultivariate UpdaterContinuous
-UpdaterConjugateMV UpdaterMetropolisUV UpdaterMetropolisMV UpdaterRandWalkUV UpdaterAuxillary UpdaterEmpty UpdaterActions UpdaterMessages UpdaterExternal UpdaterResources
+UpdaterUpdaters UpdaterMethods UpdaterUnivariate UpdaterMultivariate UpdaterContinuous UpdaterConjugateMV UpdaterMetropolisUV UpdaterMetropolisMV UpdaterRandWalkUV UpdaterAuxillary UpdaterEmpty UpdaterActions UpdaterMessages UpdaterExternal UpdaterResources
 
 GraphConstant GraphMixture GraphMAP
 
-DeviancePlugin
-
-BugsVersion BugsNames BugsIndex BugsVariables BugsParser BugsEvaluate BugsCodegen BugsOptimize BugsCPWrite BugsCPCompiler BugsNodes BugsData BugsGraph BugsPrettyprinter BugsLatexprinter BugsSerialize
+BugsVersion BugsNames BugsGrammar BugsIndex BugsVariables BugsParser BugsEvaluate BugsCodegen BugsOptimize BugsCPWrite BugsCPCompiler BugsNodes BugsData BugsGraph BugsPrettyprinter BugsLatexprinter  
 
 UpdaterHMC
 
-BugsInterface BugsRobjects BugsTraphandler1 BugsExternal BugsMAP BugsMessages BugsResources  BugsPartition BugsParallel BugsComponents BugsInfo
+BugsSerialize BugsInterface BugsRobjects BugsTraphandler1 BugsExternal BugsMAP BugsMessages BugsResources  BugsPartition BugsParallel  BugsComponents BugsInfo 
 
 BugsRectData BugsSplusData
 
@@ -46,7 +49,7 @@ RanksMessages RanksResources
 ModelsMonitors ModelsIndex ModelsInterface ModelsFormatted
 ModelsMessages ModelsResources
 
-DevianceMonitors DeviancePluginS DevianceParents
+DevianceMonitors  DevianceParents DeviancePlugin
 DevianceIndex DevianceInterface DevianceFormatted DevianceMessages DevianceResources
 
 CorrelInterface CorrelFormatted CorrelMessages CorrelResources
@@ -55,9 +58,9 @@ BugsMaster
 
 GraphPiecewise GraphODEmath GraphODElang GraphODEBlockL GraphODEBlockM
 
-GraphAESolver GraphCloglog GraphCut GraphHalf GraphDensity GraphGammap GraphInprod GraphIntegrate GraphKepler GraphLog GraphLogdet GraphLogit GraphMapped GraphProbit GraphProduct GraphRanks GraphSumation GraphTable GraphPValue GraphReplicate GraphPi GraphValDiff
+GraphAESolver GraphCloglog GraphCut GraphHalf GraphDensity GraphGammap GraphInprod GraphIntegrate GraphKepler GraphLog GraphLogdet GraphLogit GraphProbit GraphProduct GraphRanks GraphSumation GraphTable GraphPValue GraphReplicate GraphPi 
 
-GraphEigenvals GraphInverse GraphItermap GraphODElangRK45 GraphODEBlockLRK45 
+GraphEigenvals GraphInverse GraphODElangRK45 GraphODEBlockLRK45 
 GraphStick
 
 GraphBern GraphBinomial GraphCat GraphCat2 GraphFounder GraphGeometric GraphHypergeometric GraphMendelian GraphNegbin GraphPoisson GraphRecessive GraphZipf
@@ -79,7 +82,7 @@ UpdaterForward
 
 UpdaterCatagorical UpdaterDescreteSlice UpdaterMetbinomial 
 
-UpdaterICM
+UpdaterICM 
 
 UpdaterBeta UpdaterGamma  UpdaterGriddy UpdaterMetover UpdaterMetnormal UpdaterNaivemet UpdaterNormal UpdaterPareto UpdaterPoisson UpdaterRandEffect UpdaterRejection UpdaterSCAAR UpdaterSCDE UpdaterSDScale UpdaterSlice UpdaterSlicegamma UpdaterStage1 UpdaterStage1P UpdaterVD 
 
@@ -88,7 +91,7 @@ UpdaterAMblock UpdaterKernelblock UpdaterDEblock UpdaterDelayedDirectional1D Upd
 UpdaterUnivariateT UpdaterMultivariateT
 
 SpatialExternal SpatialResources SpatialUVCAR
-SpatialBound SpatialCARl1 SpatialCARNormal SpatialCARProper SpatialDiscKrig SpatialExpKrig SpatialMaternKrig SpatialPoissconv SpatialMVCAR
+SpatialBound SpatialCARl1 SpatialCARNormal SpatialCARProper SpatialDiscKrig SpatialExpKrig SpatialMaternKrig SpatialPoissconv
 
 ReliabilityBS ReliabilityBurrXII ReliabilityBurrX ReliabilityExpPower ReliabilityExpoWeibull ReliabilityExtExp ReliabilityExtendedWeibull ReliabilityFlexibleWeibull ReliabilityGenExp ReliabilityGPWeibull ReliabilityGompertz ReliabilityGumbel ReliabilityInvGauss ReliabilityInvWeibull ReliabilityLinearFailure ReliabilityLogisticExp ReliabilityLogLogistic ReliabilityLogWeibull ReliabilityModifiedWeibull ReliabilitySystem ReliabilityWrapper ReliabilityExternal ReliabilityResources
 
@@ -125,7 +128,7 @@ DoodleNodes DoodlePlates DoodleModels DoodleMenus DoodleDialog DoodleViews Doodl
 
 BugsInfodebug BugsDocu BugsSearch
 
-PlotsAxis("OS":"Linux") PlotsViews PlotsDialog PlotsNomaxis PlotsStdaxis PlotsEmptyaxis
+PlotsAxis("OS":"Linux")  PlotsViews PlotsDialog PlotsNomaxis PlotsStdaxis PlotsEmptyaxis
 
 SamplesViews SamplesPlots SamplesCmds
 SamplesCorrelat SamplesDensity SamplesDiagnostics SamplesHistory SamplesQuantiles SamplesTrace SamplesJumpdist SamplesAccept
