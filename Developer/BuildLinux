@@ -1,6 +1,8 @@
 #!/bin/bash
 
 IFS='' read -r -d '' modules_to_make <<"EOF"
+Windows
+
 HostMenusLinux
 
 Environment("OS":"Linux")
