@@ -84,7 +84,7 @@ jobs:
       echo on
       set PATH=C:\Program Files\Microsoft MPI\Bin;C:\Program Files\R\R-3.5.1\bin\x64;%PATH%
       IF "%SUITE%"=="main" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", exclude = c(\"Air\", \"Abbey\", \"StVeit\", \"Sixcomp\", \"Curves\", \"Hald\", \"Pigweights\", \"Pines\", \"ChangePoints\", \"Leukfr\"))"
-      IF "%SUITE%"=="other" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\"))"
+      IF "%SUITE%"=="other" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
       IF "%SUITE%"=="other" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\", exclude = c(\"MVCAR\"))"
     displayName: Run tests
   - task: PublishTestResults@2
