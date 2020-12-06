@@ -83,9 +83,9 @@ jobs:
   - script: |
       echo on
       set PATH=C:\Program Files\Microsoft MPI\Bin;C:\Program Files\R\R-3.5.1\bin\x64;%PATH%
-      IF "%SUITE%"=="main" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", exclude = c(\"StVeit\", \"Sixcomp\", \"Curves\", \"Hald\"))"
+      IF "%SUITE%"=="main" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", exclude = c(\"Abbey\", \"StVeit\", \"Sixcomp\", \"Curves\", \"Hald\", \"ChangePoints\", \"Leukfr\"))"
       IF "%SUITE%"=="other" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/Reliability/Examples/\")"
-      IF "%SUITE%"=="other" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\", exclude = c(\"MVCAR\"))"
+      IF "%SUITE%"=="other" Rscript.exe -e "multibugstests:::bugs_examples_all(n.workers = %WORKERS%, n.chains = %CHAINS%, report = \"junit\", examples.dir = \"C:/MultiBUGS/GeoBUGS/Examples/\", exclude = c(\"MVCAR\", \"Pollution\"))"
     displayName: Run tests
   - task: PublishTestResults@2
     inputs:
@@ -349,11 +349,11 @@ jobs:
       export DISPLAY=":99"
       cd ${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary
       if [ "$SUITE" == "main" ]; then
-        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", exclude = c(\"StVeit\", \"Sixcomp\", \"Curves\", \"Hald\"))"
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", exclude = c(\"Changepoints\", \"StVeit\", \"Sixcomp\", \"Curves\", \"Hald\", \"Leukfr\"))"
       fi
       if [ "$SUITE" == "other" ]; then
         Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/Reliability/Examples/\", exclude = c(\"InvGaussian\", \"WeibullShifted\"))"
-        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/GeoBUGS/Examples/\", exclude = c(\"MVCAR\"))"
+        Rscript -e "multibugstests:::bugs_examples_all(dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/\", n.workers = ${WORKERS}, n.chains = ${CHAINS}, report = \"junit\", examples.dir = \"${BUILD_SOURCESDIRECTORY}/MultiBUGS-binary/GeoBUGS/Examples/\", exclude = c(\"MVCAR\", \"Pollution\"))"
       fi
     #timeoutInMinutes: 5
     continueOnError: true
